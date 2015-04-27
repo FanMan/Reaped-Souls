@@ -33,7 +33,7 @@ public class Character {
 	private double renderX, renderY;
 	private double previousX, previousY;
 	
-	private boolean onGround;
+	private boolean onGround, falling;
 	private boolean dodge;
 	
 	/*
@@ -66,6 +66,7 @@ public class Character {
 		this.dead = false;
 		this.health = 10;
 		this.onGround = false;
+		this.falling = true;
 		this.attack = false;
 		
 		//this.Max_Speed = 0.05f;
@@ -138,20 +139,22 @@ public class Character {
 	 * player cannot pass. If you end up using an {@code &&}, the player will end up pass as one of the corners could be false
 	 */
 	public void collision() {
+		System.out.println(velY);
 		double nextX = xPos + velX;
 		double nextY = yPos + velY;
 		double tempX = xPos, tempY = yPos;
 		
 		/**
-		 * checks for collision to the left of the player
+		 * {@code level.getType((int) (yPos / blockSize), (int) ((xPos - velX) / blockSize)).equals("A") }
+		 * Checks for collision on the top left corner of the player while checking ahead of where the player will be
+		 *   instead of where the player is now
+		 *   
+		 * 
 		 */
-		
-		//System.out.println((level.getType((int) (yPos / blockSize), (int) ((xPos - velX) / blockSize)).equals("A") 
-		//		|| level.getType((int) ((yPos + height) / blockSize), (int) ((xPos - velX) / blockSize)).equals("A")));
 		if(left)
 		{
 			if (level.getType((int) (yPos / blockSize), (int) ((xPos - velX) / blockSize)).equals("A") 
-					|| level.getType((int) ((yPos + height) / blockSize), (int) ((xPos - velX) / blockSize)).equals("A")
+					|| level.getType((int) ((yPos + height-velY) / blockSize), (int) ((xPos - velX) / blockSize)).equals("A")
 					|| level.getType((int) ((yPos + (height / 2)) / blockSize), (int) ((xPos - velX) / blockSize)).equals("A")) 
 			{
 				if ((xPos - velX) <= level.getBlockX((int) (yPos / blockSize), (int) ((xPos - velX) / blockSize)) + blockSize) 
@@ -164,13 +167,13 @@ public class Character {
 			}
 		}
 		
-		/**
+		/*
 		 * checks for collision to the right of the player
 		 */
 		if(right)
 		{
 			if (level.getType((int) (yPos / blockSize), (int) ((nextX + width) / blockSize)).equals("A")
-					|| level.getType((int) ((yPos + height) / blockSize), (int) ((nextX + width) / blockSize)).equals("A")
+					|| level.getType((int) ((yPos + height-velY) / blockSize), (int) ((nextX + width) / blockSize)).equals("A")
 					|| level.getType((int) ((yPos + (height / 2)) / blockSize), (int) ((nextX + width) / blockSize)).equals("A"))
 			{
 				if ((nextX + width) >= level.getBlockX((int) (yPos / blockSize), (int) ((nextX + width) / blockSize))) 
@@ -183,16 +186,16 @@ public class Character {
 			}
 		}
 		
-		/**
+		/*
 		 * checks for collision underneath the player
 		 */
-		if(!onGround){
-			if(level.getType((int) ((nextY+height)/blockSize), (int) ((xPos+2)/blockSize)).equals("A") 
-				|| level.getType((int) ((nextY+height)/blockSize), (int) ((xPos+width-2)/blockSize)).equals("A")
-				|| level.getType((int) ((nextY+height)/blockSize), (int) ((xPos+2)/blockSize)).equals("AB") 
-				|| level.getType((int) ((nextY+height)/blockSize), (int) ((xPos+width-2)/blockSize)).equals("AB"))
+		if(falling){
+			if(level.getType((int) ((nextY+height-velY)/blockSize), (int) ((xPos+2)/blockSize)).equals("A") 
+				|| level.getType((int) ((nextY+height-velY)/blockSize), (int) ((xPos+width-2)/blockSize)).equals("A")
+				|| level.getType((int) ((nextY+height-velY)/blockSize), (int) ((xPos+2)/blockSize)).equals("AB") 
+				|| level.getType((int) ((nextY+height-velY)/blockSize), (int) ((xPos+width-2)/blockSize)).equals("AB"))
 			{
-				if((nextY+height) >= level.getBlockY((int) ((nextY+height)/blockSize), (int) (xPos/blockSize)))
+				if((nextY+height+velY) >= level.getBlockY((int) ((nextY+height)/blockSize), (int) (xPos/blockSize)))
 				{
 					velY = 0;
 					tempY = level.getBlockY((int) ((nextY+height)/blockSize), (int) (xPos/blockSize)) - (height+2);
@@ -205,7 +208,7 @@ public class Character {
 			}
 		}
 		
-		/**
+		/*
 		 * checks for collision above the player
 		 */
 		if(level.getType((int) ((yPos-7)/blockSize), (int) (xPos/blockSize)).equals("A")
@@ -219,7 +222,7 @@ public class Character {
 		}
 		
 		
-		/**
+		/*
 		 * kills the player if they fall off the map
 		 */
 		if(level.getType((int) ((nextY+height)/blockSize), (int) ((xPos)/blockSize)).equals("X"))
@@ -241,6 +244,18 @@ public class Character {
 	
 	private void jumpState() {
 		
+		/*
+		 * if onGround == true
+		 *   if(jump == true) jump is called
+		 *     velY
+		 */
+		if(onGround)
+		{
+			if(jump)
+			{
+				velY -= 32;
+			}
+		}
 	}
 	
 	//////////////////////////////////////////////////////////////
@@ -253,10 +268,6 @@ public class Character {
 		previousX = xPos;
 		previousY = yPos;
 		
-		collision();
-		//death();
-		jumpState();
-		
 		/**
 		 * movement of the player
 		 */
@@ -267,8 +278,13 @@ public class Character {
 			xPos -= velX;
 		}
 		
-		//velY += p.getGravity();
+		velY += p.getGravity();
+		System.out.println(velY);
 		yPos += velY;
+		
+		collision();
+		//death();
+		jumpState();
 		
 		///////////////////////////////////////////////////////////////////////
 		// minor collision detection
