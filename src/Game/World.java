@@ -26,7 +26,8 @@ public class World {
 		
 		for(int row = 0; row < level.getMapHeight(); row++) {
 			for(int col = 0; col < level.getMapWidth(); col++) {
-				if(level.getType(row, col).equals("A")) {
+				if(level.getType(row, col).equals("A")
+						|| level.getType(row, col).equals("AB")) {
 					g.setColor(Color.orange);
 				}
 				
