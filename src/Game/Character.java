@@ -3,54 +3,70 @@ package Game;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.event.KeyEvent;
+import java.util.regex.*;
 
 public class Character {
 	
+	/*
+	 * create variables of the classes
+	 */
 	private LevelReader level;
 	private Enemy enemy;
 	private Physics p;
+	
 	private int blockSize;
 	
-	private boolean right, left, falling;
+	private Rectangle hitbox;
+	
+	/*
+	 * movement of whether the character should perform an action
+	 */
+	private boolean right, left, jump, attack;
 	
 	private double interp;
 	
+	/*
+	 * position and size of the character
+	 */
 	private int width, height;
 	private double xPos, yPos, velX, velY;
 	private double renderX, renderY;
 	private double previousX, previousY;
 	
-	private boolean onGround, jump;
+	private boolean onGround;
 	private boolean dodge;
 	
-	
-	private Rectangle hitbox, hitbox2;
-	
-	private int health;
+	/*
+	 * status of the player
+	 */
+	private int health, lives;
 	private boolean dead;
 	
+	/*
+	 * constructor method of the character. Takes in LevelReader and Enemy
+	 */
 	public Character(LevelReader l, Enemy e) {
 		this.enemy = e;
 		this.level = l;
 		p = new Physics();
 		this.dead = true;
-		
+		lives = 3;
 		blockSize = level.getBlockSize(0, 0);
 		
 		// sets the spawn point of the player using the death function
 		death();
 		
-		this.width = 50;
-		this.height = 150;
+		width = 50;
+		height = 150;
 		
-		this.velX = 7.0;
-		this.velY = 3.0;
+		velX = 7.0;
+		velY = 0.0;
 		//this.velY += p.getGravity();
 		
 		this.dead = false;
 		this.health = 10;
-		
+		this.onGround = false;
+		this.attack = false;
 		
 		//this.Max_Speed = 0.05f;
 		
@@ -60,16 +76,19 @@ public class Character {
 	
 	/////////////////////////////////////////////////////////////////////////
 	
+	// get the x position of the player
 	public double getXPos() {
 		return xPos;
 	}
 	
+	// get the y position of the player
 	public double getYPos() {
 		return yPos;
 	}
 	
 	/////////////////////////////////////////////////////////////////////////
 	
+	// sets the spawn point of the player
 	public void spawnPoint(double x, double y) {
 		this.xPos = x + 5;
 		this.yPos = y + 5;
@@ -77,16 +96,23 @@ public class Character {
 		health = 10;
 	}
 	
+	// method that checks whether the player is dead or not
 	public void death() {
-		if(dead) {
-			dead = true;
+		int a = 2;
+		if(dead == true) {
+			//dead = true;
+			System.out.println(a + 2);
 			spawnPoint(level.setSpawnX(), level.setSpawnY());
+			
 			//spawnPoint(150, 150);
 		}
 	}
 	
 	///////////////////////////////////////////////////////////////
 	
+	/*
+	 * methods that checkes whether the player should perform a certain action
+	 */
 	public void moveRight(boolean b) {
 		this.right = b;
 	}
@@ -97,7 +123,10 @@ public class Character {
 		jump = b;
 	}
 	public void dodge(boolean b) {
-		this.dodge = b;
+		dodge = b;
+	}
+	public void attack(boolean b) {
+		this.attack = b;
 	}
 	
 	//////////////////////////////////////////////////////////////
@@ -122,7 +151,8 @@ public class Character {
 		if(left)
 		{
 			if (level.getType((int) (yPos / blockSize), (int) ((xPos - velX) / blockSize)).equals("A") 
-					|| level.getType((int) ((yPos + height) / blockSize), (int) ((xPos - velX) / blockSize)).equals("A")) 
+					|| level.getType((int) ((yPos + height) / blockSize), (int) ((xPos - velX) / blockSize)).equals("A")
+					|| level.getType((int) ((yPos + (height / 2)) / blockSize), (int) ((xPos - velX) / blockSize)).equals("A")) 
 			{
 				if ((xPos - velX) <= level.getBlockX((int) (yPos / blockSize), (int) ((xPos - velX) / blockSize)) + blockSize) 
 				{
@@ -140,7 +170,9 @@ public class Character {
 		if(right)
 		{
 			if (level.getType((int) (yPos / blockSize), (int) ((nextX + width) / blockSize)).equals("A")
-					|| level.getType((int) ((yPos + height) / blockSize), (int) ((nextX + width) / blockSize)).equals("A")) {
+					|| level.getType((int) ((yPos + height) / blockSize), (int) ((nextX + width) / blockSize)).equals("A")
+					|| level.getType((int) ((yPos + (height / 2)) / blockSize), (int) ((nextX + width) / blockSize)).equals("A"))
+			{
 				if ((nextX + width) >= level.getBlockX((int) (yPos / blockSize), (int) ((nextX + width) / blockSize))) 
 				{
 					tempX = level.getBlockX((int) (yPos / blockSize), (int) ((nextX + width) / blockSize)) - (width+10);
@@ -156,16 +188,19 @@ public class Character {
 		 */
 		if(!onGround){
 			if(level.getType((int) ((nextY+height)/blockSize), (int) ((xPos+2)/blockSize)).equals("A") 
-				|| level.getType((int) ((nextY+height)/blockSize), (int) ((xPos+width-2)/blockSize)).equals("A"))
+				|| level.getType((int) ((nextY+height)/blockSize), (int) ((xPos+width-2)/blockSize)).equals("A")
+				|| level.getType((int) ((nextY+height)/blockSize), (int) ((xPos+2)/blockSize)).equals("AB") 
+				|| level.getType((int) ((nextY+height)/blockSize), (int) ((xPos+width-2)/blockSize)).equals("AB"))
 			{
 				if((nextY+height) >= level.getBlockY((int) ((nextY+height)/blockSize), (int) (xPos/blockSize)))
 				{
 					velY = 0;
 					tempY = level.getBlockY((int) ((nextY+height)/blockSize), (int) (xPos/blockSize)) - (height+2);
+					onGround = true;
 				}
 			}
 			else {
-				//onGround = false;
+				onGround = false;
 				tempY += velY;
 			}
 		}
@@ -195,6 +230,9 @@ public class Character {
 			}
 		}
 		
+		/*
+		 * returns the temporary variables back into the actual player positions
+		 */
 		xPos = tempX;
 		yPos = tempY;
 	}
@@ -216,12 +254,8 @@ public class Character {
 		previousY = yPos;
 		
 		collision();
-		death();
+		//death();
 		jumpState();
-		
-		if(dodge) {
-			this.height = 50;
-		}
 		
 		/**
 		 * movement of the player
@@ -232,6 +266,9 @@ public class Character {
 		if(this.left) {
 			xPos -= velX;
 		}
+		
+		//velY += p.getGravity();
+		yPos += velY;
 		
 		///////////////////////////////////////////////////////////////////////
 		// minor collision detection
