@@ -33,28 +33,44 @@ public class World {
 		
 		for(int row = 0; row < level.getMapHeight(); row++) {
 			for(int col = 0; col < level.getMapWidth(); col++) {
+				String temp = level.getType(row, col);
+				
 				if(level.getType(row, col).equals("AA")
 						|| level.getType(row, col).equals("AB")) {
 					g.setColor(Color.orange);
 				}
-				
 				else {
 					g.setColor(Color.black);
 				}
-				
-				g.fillRect(level.getBlockX(row, col),
-					level.getBlockY(row, col),
-					level.getBlockSize(row, col), 
-					level.getBlockSize(row, col));
+				/*
+				switch(temp)
+				{
+				case "AA" :
+					g.setColor(Color.orange);
+					break;
+				case "AB" :
+					g.setColor(Color.orange);
+					break;
+				default :
+					g.setColor(Color.black);
+					break;
+				}
+				*/
+				g.fillRect(level.getBlockX(row, col), level.getBlockY(row, col),
+					level.getBlockSize(row, col), level.getBlockSize(row, col));
 			}
 		}
 		
-
+		
 		enemy.render(g);
 		character.render(g);
 	}
 	
 	public Character getCharacter() {
 		return character;
+	}
+	
+	public LevelReader getLevel() {
+		return level;
 	}
 }

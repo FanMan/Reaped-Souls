@@ -95,6 +95,8 @@ public class LevelReader {
 		}
 	}
 	
+	///////////////////////////////////////////////////////////////////////////////
+	
 	public int getMapHeight() {
 		return MapHeight;
 	}

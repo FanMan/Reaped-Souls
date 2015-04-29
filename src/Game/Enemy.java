@@ -9,7 +9,8 @@ public class Enemy {
 	private LevelReader level;
 	private Physics p;
 	
-	private double xPos, yPos;
+	private double previousX, previousY;
+	private double xPos, yPos, velX, velY;
 	private int width, height;
 	private boolean collide;
 	private boolean dead;
@@ -22,13 +23,13 @@ public class Enemy {
 		this.width = 50;
 		this.height = 50;
 		
-		dead = true;
-		death();
+		dead = false;
+		spawnPoint(level.enemySpawnX(), level.enemySpawnY());
 		
 		this.collide = false;
 	}
 	
-	public void spawnPoint(int x, int y) {
+	public void spawnPoint(double x, double y) {
 		this.xPos = x + 2;
 		this.yPos = y + 5;
 		dead = false;
@@ -40,14 +41,14 @@ public class Enemy {
 		}
 	}
 	
+	
+	
 	public void update() {
-		//xPos += 2;
+		previousX = xPos;
+		previousY = yPos;
 		
-		yPos += p.getGravity();
 		
-		if(yPos+height >= 500) {
-			yPos = 500-height;
-		}
+		
 	}
 	
 	public void render(Graphics2D g) {

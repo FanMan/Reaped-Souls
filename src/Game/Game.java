@@ -79,6 +79,7 @@ class Display extends Canvas implements Runnable, KeyListener{
 		
 		init();
 		
+		/*
 		double fps = 60;
 		double startTime = System.nanoTime();
 		double accumulator = 0.0; // accumulates the left over time
@@ -93,9 +94,9 @@ class Display extends Canvas implements Runnable, KeyListener{
 			
 			//accumulator += delta;
 			
-			/*while(accumulator >= time) {
-				accumulator -= time;
-				*/
+			//while(accumulator >= time) {
+			//	accumulator -= time;
+				
 			while(delta >= 1) {
 				world.update();
 				
@@ -104,8 +105,44 @@ class Display extends Canvas implements Runnable, KeyListener{
 				delta--;
 			}
 			
-			//character.interpolate(accumulator/time);
+			//character.interpolate(delta/time);
 			//System.out.println(delta);
+			render();
+		}*/
+		
+		double t = 0.0;
+		double dt = 1.0 / 60.0;
+		double currentTime = System.currentTimeMillis() * 0.001;
+		double accumulator = 0.0;
+		double newTime;
+		double frameTime;
+		
+		while(running)
+		{
+			newTime = System.currentTimeMillis() * 0.001;
+			frameTime = newTime - currentTime;
+			
+			if(frameTime > (dt * 25))
+				frameTime = dt * 25;
+			
+			currentTime = newTime;
+			
+			accumulator += frameTime;
+			
+			while(accumulator >= dt)
+			{
+				world.update();
+				camera.update(world.getCharacter(), screenWidth, screenHeight);
+				t += dt;
+				accumulator -= dt;
+			}
+			
+			double interpolation = accumulator / dt;
+			
+			//System.out.println("Interpolation " + interpolation);
+			camera.interpolate(interpolation);
+			world.getCharacter().interpolate(interpolation);
+			
 			render();
 		}
 	}
@@ -123,7 +160,11 @@ class Display extends Canvas implements Runnable, KeyListener{
 		Graphics2D g2d = (Graphics2D) g;
 		//g.setBackground(Color.black);
 		g.setColor(Color.black);
-		g.fillRect(0, 0, screenWidth, screenHeight);
+		//g.fillRect(0, 0, screenWidth, screenHeight);
+		g.fillRect(0, 0, world.getLevel().getMapWidth() * 150, world.getLevel().getMapHeight() * 150);
+		
+		g.setColor(Color.white);
+		g.drawString("" + world.getCharacter().getLives(), 20, 20);
 		
 		// draws the world to the screen
 		g2d.translate(camera.getCameraX(), camera.getCameraY());

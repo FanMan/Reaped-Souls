@@ -48,27 +48,29 @@ public class Character {
 		this.enemy = e;
 		this.level = l;
 		p = new Physics();
-		this.dead = true;
+		
 		lives = 3;
+		
+		// gets the size of the block and stores it in blockSize
+		// all blocks are of the same width and height
 		blockSize = level.getBlockSize(0, 0);
 		
-		// sets the spawn point of the player using the death function
-		death();
+		/**
+		 * initializes the location of the player
+		 */
+		spawnPoint(level.setSpawnX(), level.setSpawnY());
 		
 		width = 50;
 		height = 150;
 		
 		velX = 7.0;
 		velY = 0.0;
-		//this.velY += p.getGravity();
 		
 		this.dead = false;
 		this.health = 10;
-		this.onGround = false;
-		this.falling = true;
+		this.onGround = false; // the character is currently not on the ground
+		this.falling = true; // the character is falling
 		this.attack = false;
-		
-		//this.Max_Speed = 0.05f;
 		
 		this.hitbox = new Rectangle((int) xPos, (int) yPos, width, height);
 		
@@ -76,12 +78,12 @@ public class Character {
 	
 	/////////////////////////////////////////////////////////////////////////
 	
-	// get the x position of the player
+	// retrieve the x position of the player
 	public double getXPos() {
 		return xPos;
 	}
 	
-	// get the y position of the player
+	// retrieve the y position of the player
 	public double getYPos() {
 		return yPos;
 	}
@@ -90,6 +92,13 @@ public class Character {
 	
 	// sets the spawn point of the player
 	public void spawnPoint(double x, double y) {
+		/**
+		 * when this method is called, it takes in the position of the tile
+		 * where the character is supposed to spawn. In the text file, it is represented
+		 * as "SS". So when the player starts the level or dies, they are set back at that
+		 * spawn point with a small displacement of 5 for both x and y to prevent
+		 * the character from getting stuck inside any non-passable block
+		 */
 		this.xPos = x + 5;
 		this.yPos = y + 5;
 		dead = false;
@@ -98,13 +107,19 @@ public class Character {
 	
 	// method that checks whether the player is dead or not
 	public void death() {
-		int a = 2;
 		if(dead == true) {
 			//dead = true;
-			System.out.println(a + 2);
 			spawnPoint(level.setSpawnX(), level.setSpawnY());
-			
+			lives--;
 			//spawnPoint(150, 150);
+		}
+		
+		/*
+		 * when the character loses all of their lives, the application game ends
+		 * later on, there will be a game over screen that will appear
+		 */
+		if(lives < 0) {
+			System.exit(0);
 		}
 	}
 	
@@ -138,9 +153,20 @@ public class Character {
 	 * player cannot pass. If you end up using an {@code &&}, the player will end up pass as one of the corners could be false
 	 */
 	public void collision() {
-		//System.out.println(velY);
+		/**
+		 * store the position of the player into temporary values. The reason for this is that you
+		 * need to predict whether the player is actually going to hit a wall before it actually
+		 * happens. The reason why is to prevent any errors where the player could get stuck
+		 * inside a wall while checking.
+		 * 
+		 * nextX is what the x position will be when x velocity is applied
+		 * nextY is what the y position will be when 7 is applied. The reason 7 is applied
+		 *   instead of velY is that velY is constantly changing and it could be at 0 so it
+		 *   would not be able to predict beforehand
+		 * tempX and tempY temporarily stores the x and y values without having to actually
+		 *   affect the x and y positions
+		 */
 		double nextX = xPos + velX;
-		//double nextY = yPos + velY;
 		double nextY = yPos + 7;
 		double tempX = xPos, tempY = yPos;
 		
@@ -200,7 +226,6 @@ public class Character {
 					velY = 0;
 					tempY = level.getBlockY((int) ((nextY + height) / blockSize), (int) (xPos / blockSize)) - (height+2);
 					onGround = true;
-					System.out.println(onGround);
 				}
 			}
 			else {
@@ -226,7 +251,7 @@ public class Character {
 		/*
 		 * kills the player if they fall off the map
 		 */
-		if(level.getType((int) ((nextY+height)/blockSize), (int) ((xPos)/blockSize)).equals("X"))
+		if(level.getType((int) ((nextY+height)/blockSize), (int) ((xPos)/blockSize)).equals("XX"))
 		{
 			if ((nextY) >= level.getBlockY((int) (yPos / blockSize), (int) (xPos / blockSize)))
 			{
@@ -260,16 +285,7 @@ public class Character {
 		}
 	}
 	
-	//////////////////////////////////////////////////////////////
-	
-	public void interpolate(double alpha) {
-		interp = alpha;
-	}
-	
-	public void update() {
-		previousX = xPos;
-		previousY = yPos;
-		
+	public void movement() {
 		/**
 		 * movement of the player
 		 */
@@ -281,11 +297,23 @@ public class Character {
 		}
 		
 		velY += p.getGravity();
-		//System.out.println(velY);
 		yPos += velY;
+	}
+	
+	//////////////////////////////////////////////////////////////
+	
+	public void interpolate(double alpha) {
+		interp = alpha;
+	}
+	
+	public void update() {
+		previousX = xPos;
+		previousY = yPos;
 		
+		
+		movement();
 		collision();
-		//death();
+		death();
 		jumpState();
 		
 		///////////////////////////////////////////////////////////////////////
@@ -294,14 +322,23 @@ public class Character {
 		{
 			enemy.collided(true);
 		} else enemy.collided(false);
-		//System.out.println(xPos >= enemy.boundingBox().getX());
+		
+		renderX = (xPos - previousX) * interp + previousX;
+		renderY = (yPos - previousY) * interp + previousY;
+		
+		System.out.println((int) (renderX));
 	}
 	
 	public void render(Graphics2D g) {
-		renderX = xPos;//*interp + previousX*(1.0-interp);
-		renderY = yPos;//*interp + previousY*(1.0-interp);
+		//renderX = xPos*interp + previousX*(1.0-interp);
+		//renderY = yPos*interp + previousY*(1.0-interp);
 		
 		g.setColor(Color.blue);
 		g.fillRect((int) renderX, (int) renderY, width, height);
+	}
+	
+	public int getLives()
+	{
+		return lives;
 	}
 }
