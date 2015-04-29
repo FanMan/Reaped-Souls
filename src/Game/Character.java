@@ -3,7 +3,6 @@ package Game;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.util.regex.*;
 
 public class Character {
 	
@@ -139,9 +138,10 @@ public class Character {
 	 * player cannot pass. If you end up using an {@code &&}, the player will end up pass as one of the corners could be false
 	 */
 	public void collision() {
-		System.out.println(velY);
+		//System.out.println(velY);
 		double nextX = xPos + velX;
-		double nextY = yPos + velY;
+		//double nextY = yPos + velY;
+		double nextY = yPos + 7;
 		double tempX = xPos, tempY = yPos;
 		
 		/**
@@ -153,9 +153,9 @@ public class Character {
 		 */
 		if(left)
 		{
-			if (level.getType((int) (yPos / blockSize), (int) ((xPos - velX) / blockSize)).equals("A") 
-					|| level.getType((int) ((yPos + height-velY) / blockSize), (int) ((xPos - velX) / blockSize)).equals("A")
-					|| level.getType((int) ((yPos + (height / 2)) / blockSize), (int) ((xPos - velX) / blockSize)).equals("A")) 
+			if (level.getType((int) (yPos / blockSize), (int) ((xPos - velX) / blockSize)).equals("AA") 
+					|| level.getType((int) ((yPos + height - velY) / blockSize), (int) ((xPos - velX) / blockSize)).equals("AA")
+					|| level.getType((int) ((yPos + (height / 2)) / blockSize), (int) ((xPos - velX) / blockSize)).equals("AA")) 
 			{
 				if ((xPos - velX) <= level.getBlockX((int) (yPos / blockSize), (int) ((xPos - velX) / blockSize)) + blockSize) 
 				{
@@ -172,9 +172,9 @@ public class Character {
 		 */
 		if(right)
 		{
-			if (level.getType((int) (yPos / blockSize), (int) ((nextX + width) / blockSize)).equals("A")
-					|| level.getType((int) ((yPos + height-velY) / blockSize), (int) ((nextX + width) / blockSize)).equals("A")
-					|| level.getType((int) ((yPos + (height / 2)) / blockSize), (int) ((nextX + width) / blockSize)).equals("A"))
+			if (level.getType((int) (yPos / blockSize), (int) ((nextX + width) / blockSize)).equals("AA")
+					|| level.getType((int) ((yPos + height-velY) / blockSize), (int) ((nextX + width) / blockSize)).equals("AA")
+					|| level.getType((int) ((yPos + (height / 2)) / blockSize), (int) ((nextX + width) / blockSize)).equals("AA"))
 			{
 				if ((nextX + width) >= level.getBlockX((int) (yPos / blockSize), (int) ((nextX + width) / blockSize))) 
 				{
@@ -190,16 +190,17 @@ public class Character {
 		 * checks for collision underneath the player
 		 */
 		if(falling){
-			if(level.getType((int) ((nextY+height-velY)/blockSize), (int) ((xPos+2)/blockSize)).equals("A") 
-				|| level.getType((int) ((nextY+height-velY)/blockSize), (int) ((xPos+width-2)/blockSize)).equals("A")
-				|| level.getType((int) ((nextY+height-velY)/blockSize), (int) ((xPos+2)/blockSize)).equals("AB") 
-				|| level.getType((int) ((nextY+height-velY)/blockSize), (int) ((xPos+width-2)/blockSize)).equals("AB"))
+			if(level.getType((int) ((nextY + height)/blockSize), (int) ((xPos+2)/blockSize)).equals("AA") 
+				|| level.getType((int) ((nextY + height) / blockSize), (int) ((xPos+width-2)/blockSize)).equals("AA")
+				|| level.getType((int) ((nextY + height) / blockSize), (int) ((xPos+2)/blockSize)).equals("AB") 
+				|| level.getType((int) ((nextY + height) / blockSize), (int) ((xPos+width-2)/blockSize)).equals("AB"))
 			{
-				if((nextY+height+velY) >= level.getBlockY((int) ((nextY+height)/blockSize), (int) (xPos/blockSize)))
+				if((nextY + height) >= level.getBlockY((int) ((nextY + height) / blockSize), (int) (xPos / blockSize)))
 				{
 					velY = 0;
-					tempY = level.getBlockY((int) ((nextY+height)/blockSize), (int) (xPos/blockSize)) - (height+2);
+					tempY = level.getBlockY((int) ((nextY + height) / blockSize), (int) (xPos / blockSize)) - (height+2);
 					onGround = true;
+					System.out.println(onGround);
 				}
 			}
 			else {
@@ -253,7 +254,8 @@ public class Character {
 		{
 			if(jump)
 			{
-				velY -= 32;
+				velY -= 15;
+				onGround = false;
 			}
 		}
 	}
@@ -279,7 +281,7 @@ public class Character {
 		}
 		
 		velY += p.getGravity();
-		System.out.println(velY);
+		//System.out.println(velY);
 		yPos += velY;
 		
 		collision();

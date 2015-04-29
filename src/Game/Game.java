@@ -63,12 +63,14 @@ class Display extends Canvas implements Runnable, KeyListener{
 	
 	// initializes everything
 	public void init() {
-		
-		level = new LevelReader(1);
+		world = new World();
+		/*level = new LevelReader(1);
 		world = new World(level);
 		enemy = new Enemy(level);
 		character = new Character(level, enemy);
 		//camera = new Camera();
+		 * 
+		 */
 	}
 	
 	// function to run the game
@@ -80,22 +82,26 @@ class Display extends Canvas implements Runnable, KeyListener{
 		double fps = 60;
 		double startTime = System.nanoTime();
 		double accumulator = 0.0; // accumulates the left over time
-		double delta; // the change in time
+		double delta = 0; // the change in time
+		//double time = 1000000000 / fps;
 		double time = 1000000000 / fps;
 		
 		while(running) {
 			double currentTime = System.nanoTime();
-			delta = currentTime - startTime;
+			delta += (currentTime - startTime) / time;
 			startTime = currentTime;
 			
-			accumulator += delta;
+			//accumulator += delta;
 			
-			while(accumulator >= time) {
+			/*while(accumulator >= time) {
 				accumulator -= time;
-				//world.update();
-				character.update();
-				enemy.update();
-				camera.update(character, screenWidth);
+				*/
+			while(delta >= 1) {
+				world.update();
+				
+				camera.update(world.getCharacter(), screenWidth);
+				//camera.update(character, screenWidth);
+				delta--;
 			}
 			
 			//character.interpolate(accumulator/time);
@@ -122,8 +128,6 @@ class Display extends Canvas implements Runnable, KeyListener{
 		// draws the world to the screen
 		g2d.translate(camera.getCameraX(), camera.getCameraY());
 		world.render(g);
-		enemy.render(g);
-		character.render(g);
 		g2d.translate(-camera.getCameraX(), -camera.getCameraY());
 		
 		g.dispose();
@@ -139,16 +143,20 @@ class Display extends Canvas implements Runnable, KeyListener{
 		
 		switch(keyCode) {
 		case KeyEvent.VK_D :
-			character.moveRight(true);
+			//character.moveRight(true);
+			world.getCharacter().moveRight(true);
 			break;
 		case KeyEvent.VK_A :
-			character.moveLeft(true);
-			break;
-		case KeyEvent.VK_W :
-			character.jump(true);
+			//character.moveLeft(true);
+			world.getCharacter().moveLeft(true);
 			break;
 		case KeyEvent.VK_S :
-			character.dodge(true);
+			//character.dodge(true);
+			world.getCharacter().dodge(true);
+			break;
+		case KeyEvent.VK_W :
+			//character.jump(true);
+			world.getCharacter().jump(true);
 			break;
 		case KeyEvent.VK_ESCAPE :
 			System.exit(0);
@@ -162,13 +170,20 @@ class Display extends Canvas implements Runnable, KeyListener{
 		
 		switch(keyCode) {
 		case KeyEvent.VK_D :
-			character.moveRight(false);
+			//character.moveRight(false);
+			world.getCharacter().moveRight(false);
 			break;
 		case KeyEvent.VK_A :
-			character.moveLeft(false);
+			world.getCharacter().moveLeft(false);
+			//character.moveLeft(false);
 			break;
 		case KeyEvent.VK_W :
-			character.jump(false);
+			//character.jump(false);
+			world.getCharacter().jump(false);
+			break;
+		case KeyEvent.VK_S :
+			//character.dodge(false);
+			world.getCharacter().dodge(false);
 			break;
 		}
 	}

@@ -1,11 +1,16 @@
-20
-9
-X X X X X X X X X X X X X X X X X X X X 
-A - - - - - - - - - - - - - - - - - - A 
-A - - - - - - - - - - - - - - - - - - A 
-A - - - - - - - - - - - - - - - - - - A 
-A - S - - - - - - - - - - - - - AB AB A A 
-- - - - - - - - - S1 - - - - - - - - A A 
-A A A A A A A A A A A A A A A A A A A A 
-A A A A A A A A A A A A A A A A A A A A 
-X X X X X X X X X X X X X X X X X X X X 
+26
+14
+AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA 
+AA -- -- -- -- -- -- -- -- -- -- -- -- AA -- -- -- -- -- -- -- -- -- -- -- AA 
+AA -- SS -- -- -- -- -- -- -- -- -- -- AA -- -- -- -- -- -- -- -- -- -- -- AA 
+AA -- -- -- -- -- -- -- -- -- -- -- -- AA -- -- -- -- -- -- -- -- -- -- -- AA 
+AA AA AA AA AA AA -- -- AA AA AA -- -- AA -- -- -- -- -- -- -- -- -- -- -- AA 
+AA -- -- -- -- AA AA AA AA -- -- -- -- AA -- -- -- -- -- -- -- -- -- -- -- AA 
+AA -- -- -- -- AA AA AA AA -- -- -- -- AA -- -- -- -- -- -- AA -- -- -- -- AA 
+AA -- -- -- -- -- -- -- AA -- AA AA AA AA -- -- -- -- -- -- -- -- -- -- -- AA 
+AA -- -- -- -- -- -- -- AA -- AA -- -- -- -- -- -- -- -- -- AA -- -- -- AA AA 
+AA -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- AA AA AA AA -- -- AA AA 
+AA -- -- -- -- -- -- -- -- -- -- -- -- E1 -- -- -- AA AA -- -- -- -- -- -- AA 
+AA -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- AA AA AA -- -- -- -- -- -- AA 
+AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA 
+XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX 

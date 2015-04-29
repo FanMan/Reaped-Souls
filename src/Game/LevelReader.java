@@ -1,5 +1,6 @@
 package Game;
 
+import java.awt.Rectangle;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,23 +57,23 @@ public class LevelReader {
 			for(int row = 0; row < MapHeight; row++) {
 				for(int col = 0; col < MapWidth; col++) {
 					// all transparent blocks
-					if(tempArray[i].equals("-") || tempArray[i].equals("S")) {
-						block[row][col] = new Block(row, col, true, tempArray[i]);
+					if(tempArray[i].equals("--") || tempArray[i].equals("SS") || tempArray[i].equals("E1")) {
+						block[row][col] = new Block(row, col, false, tempArray[i]);
 						//i++;
 					}
 					// for all blocks that are not passable
 					else {
-						block[row][col] = new Block(row, col, false, tempArray[i]);
+						block[row][col] = new Block(row, col, true, tempArray[i]);
 						//i++;
 					}
 					i++;
 					
-					if(block[row][col].getId().equals("S")) {
+					if(block[row][col].getId().equals("SS")) {
 						characterSpawnX = col;
 						characterSpawnY = row;
 					}
 					
-					if(block[row][col].getId().equals("S1")) {
+					if(block[row][col].getId().equals("E1")) {
 						enemySpawnX = col;
 						enemySpawnY = row;
 					}
@@ -116,6 +117,11 @@ public class LevelReader {
 	
 	public int getBlockSize(int row, int col) {
 		return block[row][col].bounds().width;
+	}
+	
+	public Rectangle bounding(int row, int col)
+	{
+		return block[row][col].bounds();
 	}
 	
 	public int setSpawnX() {

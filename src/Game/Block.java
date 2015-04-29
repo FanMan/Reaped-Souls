@@ -5,13 +5,13 @@ import java.awt.Rectangle;
 public class Block {
 	
 	private Rectangle block;
-	private boolean passable;
+	private boolean unpassable;
 	private int blockSize = 100;
 	private String id;
 	
-	public Block(int yPos, int xPos, boolean canPass, String type) {
+	public Block(int yPos, int xPos, boolean canNotPass, String type) {
 		block = new Rectangle(xPos * blockSize, yPos * blockSize, blockSize, blockSize);
-		this.passable = canPass;
+		this.unpassable = canNotPass;
 		this.id = type;
 	}
 	
@@ -20,7 +20,7 @@ public class Block {
 	}
 	
 	public boolean pass() {
-		return passable;
+		return unpassable;
 	}
 	
 	public String getId() {
