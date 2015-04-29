@@ -99,7 +99,7 @@ class Display extends Canvas implements Runnable, KeyListener{
 			while(delta >= 1) {
 				world.update();
 				
-				camera.update(world.getCharacter(), screenWidth);
+				camera.update(world.getCharacter(), screenWidth, screenHeight);
 				//camera.update(character, screenWidth);
 				delta--;
 			}
