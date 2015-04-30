@@ -2,6 +2,7 @@ package Game;
 
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -18,7 +19,8 @@ class Display extends Canvas implements Runnable, KeyListener{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public int screenWidth = 2000, screenHeight = 2000;
+	//public int screenWidth = 2000, screenHeight = 2000;
+	public int screenWidth, screenHeight;
 	
 	private boolean running;
 	
@@ -36,6 +38,7 @@ class Display extends Canvas implements Runnable, KeyListener{
 	private LevelReader level;
 	private Camera camera;
 	//private Character character;
+	public ScreenSize s = new ScreenSize();
 	
 	KeyEvent e;
 	
@@ -64,6 +67,9 @@ class Display extends Canvas implements Runnable, KeyListener{
 	// initializes everything
 	public void init() {
 		world = new World();
+		
+		screenWidth = (int) (s.getScreenWidth());
+		screenHeight = (int) (s.getScreenHeight());
 		/*level = new LevelReader(1);
 		world = new World(level);
 		enemy = new Enemy(level);
@@ -78,6 +84,7 @@ class Display extends Canvas implements Runnable, KeyListener{
 		running = true;
 		
 		init();
+		world.init();
 		
 		/*
 		double fps = 60;
@@ -161,15 +168,24 @@ class Display extends Canvas implements Runnable, KeyListener{
 		//g.setBackground(Color.black);
 		g.setColor(Color.black);
 		//g.fillRect(0, 0, screenWidth, screenHeight);
+		
+		/**
+		 * Setting the entire background bigger than the width and height of the level itself.
+		 * This is to prevent any visual glitches that occurs when something is not rendered properly
+		 */
 		g.fillRect(0, 0, world.getLevel().getMapWidth() * 150, world.getLevel().getMapHeight() * 150);
 		
-		g.setColor(Color.white);
-		g.drawString("" + world.getCharacter().getLives(), 20, 20);
+		
 		
 		// draws the world to the screen
 		g2d.translate(camera.getCameraX(), camera.getCameraY());
 		world.render(g);
 		g2d.translate(-camera.getCameraX(), -camera.getCameraY());
+		
+		g.setColor(Color.white);
+		g.setFont(new Font("Century Gothic", Font.PLAIN, 20));
+		g.drawString("Lives: " + world.getCharacter().getLives(), 20, 20);
+		
 		
 		g.dispose();
 		bs.show();
@@ -199,8 +215,12 @@ class Display extends Canvas implements Runnable, KeyListener{
 			//character.jump(true);
 			world.getCharacter().jump(true);
 			break;
+		case KeyEvent.VK_SPACE :
+			world.getCharacter().attack(true);
+			break;
 		case KeyEvent.VK_ESCAPE :
 			System.exit(0);
+			break;
 		}
 	}
 
@@ -226,6 +246,9 @@ class Display extends Canvas implements Runnable, KeyListener{
 			//character.dodge(false);
 			world.getCharacter().dodge(false);
 			break;
+		case KeyEvent.VK_SPACE :
+			world.getCharacter().attack(false);
+			break;
 		}
 	}
 	
@@ -236,28 +259,35 @@ class Display extends Canvas implements Runnable, KeyListener{
 	}
 	
 	////////////////////////////////////////////////////
-	
-	
-	
 }
 
 public class Game {
 	
+	// the main class to start up the entire application
 	public static void main(String[] args) {
-		//Display d = new Display();
+		ScreenSize screen = new ScreenSize();
 		
 		JFrame f = new JFrame("Reaped Souls");
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setBounds(100, 100, 1500, 1000);
+		//f.setBounds(100, 100, 1500, 1000);
+		/**
+		 * this is set to resize automatically on any screen monitor especially because one screen could have
+		 * a different monitor resolution than another
+		 */
+		f.setSize((int) (screen.getScreenWidth() / 1.45), (int) (screen.getScreenHeight() / 1.45));
 		//f.setBackground(Color.black);
 		f.getContentPane().add(new Display());
 		f.setVisible(true);
 		f.setResizable(false);
 		f.pack();
 		
-		// starts the game application in the center of the monitor
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		f.setLocation(dim.width / 2 - f.getSize().width / 2,
-				dim.height / 2 - f.getSize().height / 2);
+		// will keep this here just in case until testing has been done on other monitors
+		//Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		//f.setLocation(dim.width / 2 - f.getSize().width / 2, dim.height / 2 - f.getSize().height / 2);
+		
+		// This is set to start the game application in the center of the monitor
+		f.setLocation((int) (screen.getScreenWidth() / 2 - f.getSize().width / 2),
+				(int) (screen.getScreenHeight() / 2 - f.getSize().height / 2));
+		
 	}
 }

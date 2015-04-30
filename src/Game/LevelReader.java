@@ -15,8 +15,8 @@ public class LevelReader {
 	private Block[][] block;
 	
 	private int characterSpawnX = 0, characterSpawnY = 0;
-	
 	private int enemySpawnX = 0, enemySpawnY = 0;
+	private int nextLevelX = 0, nextLevelY = 0;
 	
 	public LevelReader(int currLevel) {
 		/**
@@ -57,7 +57,8 @@ public class LevelReader {
 			for(int row = 0; row < MapHeight; row++) {
 				for(int col = 0; col < MapWidth; col++) {
 					// all transparent blocks
-					if(tempArray[i].equals("--") || tempArray[i].equals("SS") || tempArray[i].equals("E1")) {
+					if(tempArray[i].equals("--") || tempArray[i].equals("SS") || tempArray[i].equals("E1")
+							|| tempArray[i].equals("FL")) {
 						block[row][col] = new Block(row, col, false, tempArray[i]);
 						//i++;
 					}
@@ -68,14 +69,26 @@ public class LevelReader {
 					}
 					i++;
 					
+					/*
+					 * identifies the location for the player to spawn in
+					 */
 					if(block[row][col].getId().equals("SS")) {
 						characterSpawnX = col;
 						characterSpawnY = row;
 					}
 					
+					/*
+					 * identifies the location for the enemy to spawn in
+					 */
 					if(block[row][col].getId().equals("E1")) {
 						enemySpawnX = col;
 						enemySpawnY = row;
+					}
+					
+					if(block[row][col].getId().equals("FL"))
+					{
+						nextLevelX = col;
+						nextLevelY = row;
 					}
 					
 					if(i >= tempArray.length) i--;
@@ -127,7 +140,6 @@ public class LevelReader {
 	}
 	
 	public int setSpawnX() {
-		System.out.println(characterSpawnX * 100);
 		return characterSpawnX * 100;
 	}
 	
@@ -141,5 +153,13 @@ public class LevelReader {
 	
 	public int enemySpawnY() {
 		return enemySpawnY * 100;
+	}
+	
+	public int levelLocX() {
+		return nextLevelX * 100;
+	}
+	
+	public int levelLocY() {
+		return nextLevelY * 100;
 	}
 }

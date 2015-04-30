@@ -1,7 +1,10 @@
 12
-5
-A - - - - - - - - - - A 
-A - - - - - - - - - - A 
-A - - - - - - - - - - A 
-A - - - - - - - - - - A 
-A A A A A A A A A A A A 
+8
+TT TT TT TT TT TT TT TT TT TT TT TT 
+TT -- -- -- -- -- -- -- -- -- -- TT 
+TT -- -- -- -- -- -- -- -- -- -- TT 
+TT SS -- -- -- -- -- -- -- -- -- TT 
+TT -- -- -- -- AA -- -- -- E1 -- TT 
+AA AA AA AA AA AA -- -- AA AA AA AA 
+AA AA AA AA AA AA -- -- AA AA AA AA 
+XX XX XX XX XX XX XX XX XX XX XX XX

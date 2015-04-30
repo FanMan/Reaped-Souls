@@ -15,9 +15,9 @@ public class Camera {
 	
 	public void update(Character player, int screenWidth, int screenHeight) {
 		//x += ((-player.getXPos() + (screenWidth / 2)) - x) * 0.0275;
-		x += (-player.getXPos() - x + (screenWidth / 2.5) - 100) * 0.0775 * interp;
+		x += (-player.getXPos() - x + (screenWidth / 2.5) - 100) * 0.0775;
 		//y += (-player.getYPos() - y + 500) * 0.0255;
-		y += (-player.getYPos() - y + (screenHeight / 2.5) - 400) * 0.0775 * interp;
+		y += (-player.getYPos() - y + (screenHeight / 2.5) - 200) * 0.0775;
 	}
 	
 	public double getCameraX() {

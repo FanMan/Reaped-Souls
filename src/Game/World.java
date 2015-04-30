@@ -5,28 +5,67 @@ import java.awt.Graphics2D;
 
 public class World {
 	
-	//private int currLevel;
+	private int currLevel;
 	
 	private LevelReader level;
 	private Character character;
 	private Enemy enemy;
 	
+	
 	// takes in a level number so it knows which level to load
 	public World() {
-		level = new LevelReader(1);
+		currLevel = 2;
+		level = new LevelReader(currLevel);
+		//createWorld();
 		enemy = new Enemy(level);
 		character = new Character(level, enemy);
 		
 		//this.enemy = new Enemy();
 	}
 	
-	public void init() {
+	public void init()
+	{
 		
+	}
+	
+	public void nextWorld() {
+		
+		/**
+		 * 
+		 */
+		if(character.getXPos() >= level.levelLocX() 
+				&& character.getYPos() >= level.levelLocY())
+		{
+			//currLevel++;
+			level = new LevelReader(currLevel);
+			
+		}
+		
+		/*
+		 * will restart the world
+		 */
+		//if(currLevel > 2)
+		//{
+		//	currLevel = 1;
+		//}
+	}
+	
+	public void restartWorld() {
+		if(character.getLives() < 0)
+		{
+			//currLevel = 2;
+			character.setLives(3);
+			System.out.println("Restarting game");
+		}
 	}
 	
 	public void update() {
 		character.update();
 		enemy.update();
+		
+		//createWorld();
+		nextWorld();
+		restartWorld();
 	}
 	
 	public void render(Graphics2D g) {

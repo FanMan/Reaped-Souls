@@ -49,7 +49,7 @@ public class Character {
 		this.level = l;
 		p = new Physics();
 		
-		lives = 3;
+		this.lives = 3;
 		
 		// gets the size of the block and stores it in blockSize
 		// all blocks are of the same width and height
@@ -118,15 +118,16 @@ public class Character {
 		 * when the character loses all of their lives, the application game ends
 		 * later on, there will be a game over screen that will appear
 		 */
-		if(lives < 0) {
-			System.exit(0);
-		}
+		//if(lives < 0) {
+			//System.exit(0);
+		//	lives = 3;
+		//}
 	}
 	
 	///////////////////////////////////////////////////////////////
 	
 	/*
-	 * methods that checkes whether the player should perform a certain action
+	 * methods that checks whether the player should perform a certain action
 	 */
 	public void moveRight(boolean b) {
 		this.right = b;
@@ -237,13 +238,15 @@ public class Character {
 		/*
 		 * checks for collision above the player
 		 */
-		if(level.getType((int) ((yPos-7)/blockSize), (int) (xPos/blockSize)).equals("A")
-				|| level.getType((int) ((yPos-7)/blockSize), (int) (xPos+width)/blockSize).equals("A"))
+		if(level.getType((int) ((yPos - 7) / blockSize), (int) (xPos / blockSize)).equals("AA")
+				|| level.getType((int) ((yPos - 7) / blockSize), (int) (xPos + width) / blockSize).equals("AA"))
 		{
-			if((yPos-7) <= level.getBlockY((int) (yPos/blockSize), (int) (xPos/blockSize)))
+			
+			if((yPos - 7) <= level.getBlockY((int) ((yPos - 7) / blockSize), (int) (xPos / blockSize)))
 			{
 				velY = 0;
-				tempY = level.getBlockY((int) ((yPos-7)/blockSize), (int) (xPos/blockSize)) + (blockSize);
+				tempY = level.getBlockY((int) ((yPos - 7) / blockSize), (int) (xPos / blockSize)) + (blockSize) - 5;
+				System.out.println(true);
 			}
 		}
 		
@@ -285,6 +288,9 @@ public class Character {
 		}
 	}
 	
+	/**
+	 * the movement of the player
+	 */
 	public void movement() {
 		/**
 		 * movement of the player
@@ -325,8 +331,6 @@ public class Character {
 		
 		renderX = (xPos - previousX) * interp + previousX;
 		renderY = (yPos - previousY) * interp + previousY;
-		
-		System.out.println((int) (renderX));
 	}
 	
 	public void render(Graphics2D g) {
@@ -340,5 +344,10 @@ public class Character {
 	public int getLives()
 	{
 		return lives;
+	}
+	
+	public void setLives(int life)
+	{
+		lives = life;
 	}
 }
