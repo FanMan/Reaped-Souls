@@ -14,7 +14,7 @@ public class World {
 	
 	// takes in a level number so it knows which level to load
 	public World() {
-		currLevel = 2;
+		currLevel = 1;
 		level = new LevelReader(currLevel);
 		//createWorld();
 		enemy = new Enemy(level);

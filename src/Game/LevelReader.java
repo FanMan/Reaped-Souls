@@ -56,15 +56,14 @@ public class LevelReader {
 			//   the next one
 			for(int row = 0; row < MapHeight; row++) {
 				for(int col = 0; col < MapWidth; col++) {
-					// all transparent blocks
-					if(tempArray[i].equals("--") || tempArray[i].equals("SS") || tempArray[i].equals("E1")
-							|| tempArray[i].equals("FL")) {
-						block[row][col] = new Block(row, col, false, tempArray[i]);
+					// all non-transparent blocks
+					if(tempArray[i].equals("AA") || tempArray[i].equals("TT") || tempArray[i].equals("AB")) {
+						block[row][col] = new Block(row, col, true, tempArray[i]);
 						//i++;
 					}
-					// for all blocks that are not passable
+					// for all blocks that are passable
 					else {
-						block[row][col] = new Block(row, col, true, tempArray[i]);
+						block[row][col] = new Block(row, col, false, tempArray[i]);
 						//i++;
 					}
 					i++;
