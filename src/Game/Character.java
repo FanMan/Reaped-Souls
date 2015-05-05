@@ -20,7 +20,7 @@ public class Character {
 	/*
 	 * movement of whether the character should perform an action
 	 */
-	private boolean right, left, jump, attack;
+	private boolean right, left, jump, run, attack;
 	
 	private double interp;
 	
@@ -33,7 +33,6 @@ public class Character {
 	private double previousX, previousY;
 	
 	private boolean onGround, falling;
-	private boolean dodge;
 	
 	/*
 	 * status of the player
@@ -41,8 +40,16 @@ public class Character {
 	private int health, lives;
 	private boolean dead;
 	
-	/*
-	 * constructor method of the character. Takes in LevelReader and Enemy
+	/**
+	 * 
+	 * @param scytheW is the width of the scythe
+	 * @param scytheH is the height of the scythe
+	 */
+	private int scytheW, scytheH;
+	private boolean renderScythe;
+	
+	/**
+	 * @param constructor method of the character. Takes in LevelReader and Enemy
 	 */
 	public Character(LevelReader l, Enemy e) {
 		this.enemy = e;
@@ -71,9 +78,11 @@ public class Character {
 		this.onGround = false; // the character is currently not on the ground
 		this.falling = true; // the character is falling
 		this.attack = false;
+		this.run = false;
 		
-		this.hitbox = new Rectangle((int) xPos, (int) yPos, width, height);
-		
+		this.scytheW = (int) (xPos + width);
+		this.scytheH = 40;
+		this.renderScythe = false;
 	}
 	
 	/////////////////////////////////////////////////////////////////////////
@@ -138,11 +147,29 @@ public class Character {
 	public void jump(boolean b) {
 		jump = b;
 	}
-	public void dodge(boolean b) {
-		dodge = b;
+	public void run(boolean b) {
+		run = b;
 	}
 	public void attack(boolean b) {
 		this.attack = b;
+	}
+	
+	//////////////////////////////////////////////////////////////////
+	
+	/*
+	 * gets the lives of the player
+	 */
+	public int getLives()
+	{
+		return lives;
+	}
+	
+	/*
+	 * able to set the lives of the player
+	 */
+	public void setLives(int life)
+	{
+		lives = life;
 	}
 	
 	//////////////////////////////////////////////////////////////
@@ -195,7 +222,7 @@ public class Character {
 				tempX -= velX;
 			}
 		}
-		
+				
 		/*
 		 * checks for collision to the right of the player
 		 */
@@ -260,7 +287,7 @@ public class Character {
 		 */
 		if(level.getType((int) ((nextY+height)/blockSize), (int) ((xPos)/blockSize)).equals("XX"))
 		{
-			if ((nextY) >= level.getBlockY((int) (yPos / blockSize), (int) (xPos / blockSize)))
+			if ((nextY + (height / 2)) >= level.getBlockY((int) ((nextY + (height / 2)) / blockSize), (int) (xPos / blockSize)))
 			{
 				dead = true;
 			}
@@ -299,15 +326,23 @@ public class Character {
 		/**
 		 * movement of the player
 		 */
-		if(this.right) {
+		if(right) {
 			xPos += velX;
 		}
-		if(this.left) {
+		if(left) {
 			xPos -= velX;
 		}
 		
 		velY += p.getGravity();
 		yPos += velY;
+		
+		if(run) {
+			velX = 10.5;
+		}
+	}
+	
+	public void attackSystem() {
+		
 	}
 	
 	//////////////////////////////////////////////////////////////
@@ -320,9 +355,9 @@ public class Character {
 		previousX = xPos;
 		previousY = yPos;
 		
-		
 		movement();
 		collision();
+		attackSystem();
 		death();
 		jumpState();
 		
@@ -343,15 +378,12 @@ public class Character {
 		
 		g.setColor(Color.blue);
 		g.fillRect((int) renderX, (int) renderY, width, height);
+		
+		if(renderScythe) {
+			g.setColor(Color.cyan);
+			g.fillRect((int) (renderX + width), (int) (renderY + (height / 3)), scytheW, scytheH);
+		}
 	}
 	
-	public int getLives()
-	{
-		return lives;
-	}
 	
-	public void setLives(int life)
-	{
-		lives = life;
-	}
 }

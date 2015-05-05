@@ -3,11 +3,14 @@ package Game;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.util.Random;
 
 public class Enemy {
 	private Rectangle hitbox;
 	private LevelReader level;
 	private Physics p;
+	
+	Random rand = new Random();
 	
 	private double previousX, previousY;
 	private double xPos, yPos, velX, velY;
@@ -21,6 +24,7 @@ public class Enemy {
 	
 	private boolean collide;
 	private boolean dead;
+	private boolean turnLeft, turnRight;
 	
 	public Enemy(LevelReader l) {
 		this.level = l;
@@ -39,6 +43,9 @@ public class Enemy {
 		this.collide = false;
 		this.falling = true;
 		blockSize = level.getBlockSize(0, 0);
+		
+		turnRight = true;
+		turnLeft = false;
 	}
 	
 	public void spawnPoint(double x, double y) {
@@ -70,6 +77,8 @@ public class Enemy {
 				if ((xPos - velX) <= level.getBlockX((int) (yPos / blockSize), (int) ((xPos - velX) / blockSize)) + blockSize) 
 				{
 					tempX = level.getBlockX((int) (yPos / blockSize), (int) ((xPos - velX) / blockSize)) + (blockSize + 10);
+					turnRight = true;
+					turnLeft = false;
 				}
 				
 			}else {
@@ -91,6 +100,8 @@ public class Enemy {
 				if ((nextX + width) >= level.getBlockX((int) (yPos / blockSize), (int) ((nextX + width) / blockSize))) 
 				{
 					tempX = level.getBlockX((int) (yPos / blockSize), (int) ((nextX + width) / blockSize)) - (width+10);
+					turnRight = false;
+					turnLeft = true;
 				}
 				
 			}else {
@@ -156,6 +167,10 @@ public class Enemy {
 	
 	public void movement()
 	{
+		
+		
+		
+		
 		velY += p.getGravity();
 		yPos += velY;
 	}

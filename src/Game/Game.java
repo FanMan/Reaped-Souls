@@ -136,8 +136,10 @@ class Display extends Canvas implements Runnable, KeyListener{
 			
 			accumulator += frameTime;
 			
+			//world.getCharacter().attackSystem(frameTime);
+			
 			while(accumulator >= dt)
-			{
+			{	
 				world.update();
 				camera.update(world.getCharacter(), screenWidth, screenHeight);
 				t += dt;
@@ -207,16 +209,15 @@ class Display extends Canvas implements Runnable, KeyListener{
 			//character.moveLeft(true);
 			world.getCharacter().moveLeft(true);
 			break;
-		case KeyEvent.VK_S :
-			//character.dodge(true);
-			world.getCharacter().dodge(true);
-			break;
 		case KeyEvent.VK_W :
 			//character.jump(true);
 			world.getCharacter().jump(true);
 			break;
 		case KeyEvent.VK_SPACE :
 			world.getCharacter().attack(true);
+			break;
+		case KeyEvent.VK_SHIFT :
+			world.getCharacter().run(true);
 			break;
 		case KeyEvent.VK_ESCAPE :
 			System.exit(0);
@@ -242,9 +243,9 @@ class Display extends Canvas implements Runnable, KeyListener{
 			//character.jump(false);
 			world.getCharacter().jump(false);
 			break;
-		case KeyEvent.VK_S :
-			//character.dodge(false);
-			world.getCharacter().dodge(false);
+
+		case KeyEvent.VK_SHIFT :
+			world.getCharacter().run(false);
 			break;
 		case KeyEvent.VK_SPACE :
 			world.getCharacter().attack(false);

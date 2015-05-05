@@ -18,19 +18,4 @@ public class Physics {
 	public double getWater() {
 		return water;
 	}
-	
-	public double verticalCollision(double x, double y) 
-	{
-		double tempX = x;
-		double tempY = y;
-		
-		return tempX;
-	}
-	
-	public double horizontalCollision(double x, double y) {
-		double tempX = x;
-		double tempY = y;
-		
-		return tempY;
-	}
 }
