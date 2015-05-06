@@ -65,7 +65,7 @@ public class World {
 		
 		//createWorld();
 		nextWorld();
-		restartWorld();
+		//restartWorld();
 	}
 	
 	public void render(Graphics2D g) {

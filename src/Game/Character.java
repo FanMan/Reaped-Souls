@@ -3,8 +3,16 @@ package Game;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 
 public class Character {
+	/**
+	 * Used to get the image and then display the image
+	 */
+	ImageLoader image = new ImageLoader();
+	BufferedImage walkRight1 = image.getImage("WalkRight1");
+	BufferedImage walkLeft1 = image.getImage("WalkLeft1");
+	private boolean facingRight, facingLeft;
 	
 	/*
 	 * create variables of the classes
@@ -56,7 +64,7 @@ public class Character {
 		this.level = l;
 		p = new Physics();
 		
-		this.lives = 3;
+		//this.lives = 3;
 		
 		// gets the size of the block and stores it in blockSize
 		// all blocks are of the same width and height
@@ -67,7 +75,7 @@ public class Character {
 		 */
 		spawnPoint(level.setSpawnX(), level.setSpawnY());
 		
-		width = 50;
+		width = 90;
 		height = 150;
 		
 		velX = 7.0;
@@ -79,6 +87,9 @@ public class Character {
 		this.falling = true; // the character is falling
 		this.attack = false;
 		this.run = false;
+		
+		facingRight = true;
+		facingLeft = false;
 		
 		this.scytheW = (int) (xPos + width);
 		this.scytheH = 40;
@@ -328,9 +339,13 @@ public class Character {
 		 */
 		if(right) {
 			xPos += velX;
+			facingRight = true;
+			facingLeft = false;
 		}
 		if(left) {
 			xPos -= velX;
+			facingRight = false;
+			facingLeft = true;
 		}
 		
 		velY += p.getGravity();
@@ -376,8 +391,16 @@ public class Character {
 		//renderX = xPos*interp + previousX*(1.0-interp);
 		//renderY = yPos*interp + previousY*(1.0-interp);
 		
-		g.setColor(Color.blue);
-		g.fillRect((int) renderX, (int) renderY, width, height);
+		//g.setColor(Color.blue);
+		//g.drawImage(walkRight1, (int) renderX, (int) renderY, null);
+		//g.fillRect((int) renderX, (int) renderY, width, height);
+		
+		if(facingRight) {
+			g.drawImage(walkRight1, (int) renderX, (int) renderY, null);
+		}
+		else if(facingLeft) {
+			g.drawImage(walkLeft1, (int) renderX, (int) renderY, null);
+		}
 		
 		if(renderScythe) {
 			g.setColor(Color.cyan);
