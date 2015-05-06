@@ -9,11 +9,12 @@ public class Character {
 	/**
 	 * Used to get the image and then display the image
 	 */
-	ImageLoader image = new ImageLoader();
-	BufferedImage walkRight1 = image.getImage("WalkRight1");
-	BufferedImage walkLeft1 = image.getImage("WalkLeft1");
-	BufferedImage jumping = image.getImage("Jump");
-	private boolean facingRight, facingLeft, isJumping;
+	ImageLoader image;// = new ImageLoader();
+	BufferedImage walkRight1;// = image.getImage("WalkRight1");
+	BufferedImage walkLeft1;// = image.getImage("WalkLeft1");
+	BufferedImage jumpingRight;// = image.getImage("JumpRight");
+	BufferedImage jumpingLeft;// = image.getImage("JumpLeft");
+	private boolean facingRight, facingLeft, isJumpingRight, isJumpingLeft;
 	
 	/*
 	 * create variables of the classes
@@ -60,7 +61,8 @@ public class Character {
 	/**
 	 * @param constructor method of the character. Takes in LevelReader and Enemy
 	 */
-	public Character(LevelReader l, Enemy e) {
+	public Character(LevelReader l, Enemy e, ImageLoader i) {
+		this.image = i;
 		this.enemy = e;
 		this.level = l;
 		p = new Physics();
@@ -91,13 +93,21 @@ public class Character {
 		
 		facingRight = true;
 		facingLeft = false;
-		isJumping = false;
+		isJumpingRight = false;
+		isJumpingLeft = false;
 		
 		this.scytheW = (int) (xPos + width);
 		this.scytheH = 40;
 		this.renderScythe = false;
 	}
 	
+	
+	public void saveImages() {
+		walkRight1 = image.getImage("WalkRight1");
+		walkLeft1 = image.getImage("WalkLeft1");
+		jumpingRight = image.getImage("JumpRight");
+		jumpingLeft = image.getImage("JumpLeft");
+	}
 	/////////////////////////////////////////////////////////////////////////
 	
 	// retrieve the x position of the player
@@ -129,6 +139,10 @@ public class Character {
 	
 	// method that checks whether the player is dead or not
 	public void death() {
+		if(health <= 0) {
+			dead = true;
+		}
+		
 		if(dead == true) {
 			//dead = true;
 			spawnPoint(level.setSpawnX(), level.setSpawnY());
@@ -183,6 +197,19 @@ public class Character {
 	public void setLives(int life)
 	{
 		lives = life;
+	}
+	
+	public int getHealth()
+	{
+		return health;
+	}
+	
+	/*
+	 * able to set the lives of the player
+	 */
+	public void sethealt(int h)
+	{
+		health = h;
 	}
 	
 	//////////////////////////////////////////////////////////////
@@ -328,7 +355,19 @@ public class Character {
 			{
 				velY -= 15;
 				onGround = false;
-				isJumping = true;
+				
+				if(facingRight) {
+					isJumpingRight = true;
+					isJumpingLeft = false;
+				}
+				if(facingLeft) {
+					isJumpingRight = false;
+					isJumpingLeft = true;
+				}
+			}
+			else {
+				isJumpingRight = false;
+				isJumpingLeft = false;
 			}
 		}
 	}
@@ -379,12 +418,28 @@ public class Character {
 		death();
 		jumpState();
 		
+		
 		///////////////////////////////////////////////////////////////////////
 		// minor collision detection
-		if(xPos >= enemy.boundingBox().getX() )//&& (xPos+width) <= (enemy.boundingBox().getX()+enemy.boundingBox().getWidth())) {
+		///////////////////////////////////////////////////////////////////////
+		
+		if(xPos >= enemy.boundingBox().getX() - 10 && (xPos + width) <= (enemy.boundingBox().getX() + enemy.boundingBox().getWidth() + 10)
+				&& yPos >= enemy.boundingBox().getY() - 10 && (yPos + height) <= (enemy.boundingBox().getY() + enemy.boundingBox().getHeight()) + 10)
 		{
 			enemy.collided(true);
-		} else enemy.collided(false);
+			//dead = true;
+			health -= 2;
+			
+			if(facingRight) {
+				xPos -= 100;
+				yPos -= 30;
+			}
+			else if(facingLeft) {
+				xPos += 100;
+				yPos -= 30;
+			}
+		}
+		else enemy.collided(false);
 		
 		renderX = (xPos - previousX) * interp + previousX;
 		renderY = (yPos - previousY) * interp + previousY;
@@ -394,23 +449,21 @@ public class Character {
 		//renderX = xPos*interp + previousX*(1.0-interp);
 		//renderY = yPos*interp + previousY*(1.0-interp);
 		
-		//g.setColor(Color.blue);
+		g.setColor(Color.blue);
 		//g.drawImage(walkRight1, (int) renderX, (int) renderY, null);
 		//g.fillRect((int) renderX, (int) renderY, width, height);
 		
-		if(facingRight) {
-			g.drawImage(walkRight1, (int) renderX, (int) renderY, null);
+		if(isJumpingRight) {
+			g.drawImage(jumpingRight, (int) renderX, (int) renderY, null);
+		}
+		else if(isJumpingLeft) {
+			g.drawImage(jumpingLeft, (int) renderX, (int) renderY, null);
+		}
+		else if(facingRight) {
+			g.drawImage(walkRight1, (int) renderX, (int) renderY + 10, null);
 		}
 		else if(facingLeft) {
-			g.drawImage(walkLeft1, (int) renderX, (int) renderY, null);
-		}
-		else if(isJumping) {
-			g.drawImage(jumping, (int) renderX, (int) renderY, null);
-		}
-		
-		if(renderScythe) {
-			g.setColor(Color.cyan);
-			g.fillRect((int) (renderX + width), (int) (renderY + (height / 3)), scytheW, scytheH);
+			g.drawImage(walkLeft1, (int) renderX, (int) renderY + 10, null);
 		}
 	}
 	

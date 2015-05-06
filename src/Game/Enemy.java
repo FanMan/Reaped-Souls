@@ -3,9 +3,16 @@ package Game;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class Enemy {
+	ImageLoader image;// = new ImageLoader();
+	private BufferedImage skeleLeft;// = image.getImage("SkeleLeft");
+	private BufferedImage skeleRight;// = image.getImage("SkeleRight");
+	private BufferedImage skeleAttackRight;// = image.getImage("");
+	private BufferedImage skeleAttackLeft;// = image.getImage("SkeleAttackLeft");
+	
 	private Rectangle hitbox;
 	private LevelReader level;
 	private Physics p;
@@ -20,19 +27,22 @@ public class Enemy {
 	
 	private boolean onGround, falling;
 	
+	private boolean facingRight, facingLeft;
+	
 	private int blockSize;
 	
 	private boolean collide;
 	private boolean dead;
 	private boolean turnLeft, turnRight;
 	
-	public Enemy(LevelReader l) {
+	public Enemy(LevelReader l, ImageLoader i) {
 		this.level = l;
+		this.image = i;
 		p = new Physics();
 		//this.xPos = 200;
 		//this.yPos = 10;
-		this.width = 50;
-		this.height = 50;
+		this.width = 120;
+		this.height = 190;
 		
 		dead = false;
 		spawnPoint(level.enemySpawnX(), level.enemySpawnY());
@@ -44,8 +54,15 @@ public class Enemy {
 		this.falling = true;
 		blockSize = level.getBlockSize(0, 0);
 		
-		turnRight = true;
-		turnLeft = false;
+		facingRight = true;
+		facingLeft = false;
+	}
+	
+	public void saveImages() {
+		skeleLeft = image.getImage("SkeleLeft");
+		skeleRight = image.getImage("SkeleRight");
+		skeleAttackRight = image.getImage("");
+		skeleAttackLeft = image.getImage("SkeleAttackLeft");
 	}
 	
 	public void spawnPoint(double x, double y) {
@@ -58,6 +75,14 @@ public class Enemy {
 		if(dead) {
 			spawnPoint(level.enemySpawnX(), level.enemySpawnY());
 		}
+	}
+	
+	public void collided(boolean b) {
+		collide = b;
+	}
+	
+	public Rectangle boundingBox() {
+		return hitbox = new Rectangle((int) xPos, (int) yPos, width, height);
 	}
 	
 	public void collision()
@@ -77,8 +102,8 @@ public class Enemy {
 				if ((xPos - velX) <= level.getBlockX((int) (yPos / blockSize), (int) ((xPos - velX) / blockSize)) + blockSize) 
 				{
 					tempX = level.getBlockX((int) (yPos / blockSize), (int) ((xPos - velX) / blockSize)) + (blockSize + 10);
-					turnRight = true;
-					turnLeft = false;
+					facingLeft = false;
+					facingRight = true;
 				}
 				
 			}else {
@@ -100,8 +125,8 @@ public class Enemy {
 				if ((nextX + width) >= level.getBlockX((int) (yPos / blockSize), (int) ((nextX + width) / blockSize))) 
 				{
 					tempX = level.getBlockX((int) (yPos / blockSize), (int) ((nextX + width) / blockSize)) - (width+10);
-					turnRight = false;
-					turnLeft = true;
+					facingRight = false;
+					facingLeft = true;
 				}
 				
 			}else {
@@ -167,9 +192,12 @@ public class Enemy {
 	
 	public void movement()
 	{
-		
-		
-		
+		if(facingRight) {
+			xPos += velX;
+		}
+		else if(facingLeft) {
+			xPos -= velX;
+		}
 		
 		velY += p.getGravity();
 		yPos += velY;
@@ -192,17 +220,13 @@ public class Enemy {
 	}
 	
 	public void render(Graphics2D g) {
-		if(!collide) {
-			g.setColor(Color.red);
-		} else g.setColor(Color.green);
-		g.fillRect((int) renderX, (int) renderY, width, height);
+		if(facingRight) {
+			g.drawImage(skeleRight, (int) renderX, (int) renderY + 10, null);
+		}
+		else if(facingLeft) {
+			g.drawImage(skeleLeft, (int) renderX, (int) renderY + 10, null);
+		}
 	}
 	
-	public void collided(boolean b) {
-		collide = b;
-	}
 	
-	public Rectangle boundingBox() {
-		return hitbox = new Rectangle((int) xPos, (int) yPos, width, height);
-	}
 }
