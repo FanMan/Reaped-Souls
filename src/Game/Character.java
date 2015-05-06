@@ -12,7 +12,8 @@ public class Character {
 	ImageLoader image = new ImageLoader();
 	BufferedImage walkRight1 = image.getImage("WalkRight1");
 	BufferedImage walkLeft1 = image.getImage("WalkLeft1");
-	private boolean facingRight, facingLeft;
+	BufferedImage jumping = image.getImage("Jump");
+	private boolean facingRight, facingLeft, isJumping;
 	
 	/*
 	 * create variables of the classes
@@ -90,6 +91,7 @@ public class Character {
 		
 		facingRight = true;
 		facingLeft = false;
+		isJumping = false;
 		
 		this.scytheW = (int) (xPos + width);
 		this.scytheH = 40;
@@ -326,6 +328,7 @@ public class Character {
 			{
 				velY -= 15;
 				onGround = false;
+				isJumping = true;
 			}
 		}
 	}
@@ -400,6 +403,9 @@ public class Character {
 		}
 		else if(facingLeft) {
 			g.drawImage(walkLeft1, (int) renderX, (int) renderY, null);
+		}
+		else if(isJumping) {
+			g.drawImage(jumping, (int) renderX, (int) renderY, null);
 		}
 		
 		if(renderScythe) {

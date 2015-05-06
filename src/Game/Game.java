@@ -33,8 +33,6 @@ public class Game {
 		f.setResizable(false);
 		f.pack();
 		
-		//System.out.println(f.getWidth());
-		
 		// will keep this here just in case until testing has been done on other monitors
 		//Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		//f.setLocation(dim.width / 2 - f.getSize().width / 2, dim.height / 2 - f.getSize().height / 2);

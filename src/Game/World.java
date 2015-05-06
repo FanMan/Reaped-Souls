@@ -2,8 +2,13 @@ package Game;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 
 public class World {
+	
+	ImageLoader image = new ImageLoader();
+	BufferedImage airBlock = image.getImage("air");
+	BufferedImage dirtBlock = image.getImage("dirt");
 	
 	private int currLevel;
 	
@@ -76,10 +81,13 @@ public class World {
 				
 				if(level.getType(row, col).equals("AA")
 						|| level.getType(row, col).equals("AB")) {
-					g.setColor(Color.orange);
+					//g.setColor(Color.orange);
+					g.drawImage(dirtBlock, level.getBlockX(row, col), level.getBlockY(row, col), null);
+					
 				}
 				else {
-					g.setColor(Color.black);
+					//g.setColor(Color.black);
+					g.drawImage(airBlock, level.getBlockX(row, col), level.getBlockY(row, col), null);
 				}
 				/*
 				switch(temp)
@@ -95,8 +103,8 @@ public class World {
 					break;
 				}
 				*/
-				g.fillRect(level.getBlockX(row, col), level.getBlockY(row, col),
-					level.getBlockSize(row, col), level.getBlockSize(row, col));
+				//g.fillRect(level.getBlockX(row, col), level.getBlockY(row, col),
+				//	level.getBlockSize(row, col), level.getBlockSize(row, col));
 			}
 		}
 		
