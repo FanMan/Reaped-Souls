@@ -12,7 +12,7 @@ import Game.MouseInput;
 import Game.ScreenSize;
 import States.GameState;
 
-public class Menu implements MouseListener{
+public class Menu {
 	
 	private Rectangle buttonPlay, buttonCredits, buttonExit;
 	private ScreenSize size;
@@ -31,10 +31,17 @@ public class Menu implements MouseListener{
 		mouse = m;
 		state = s;
 		size = new ScreenSize();
+		
+		/**
+		 * creates each button as a rectangle
+		 */
 		buttonPlay = new Rectangle((int) (size.getScreenWidth() / 4), 200, 400, 100);
 		buttonCredits = new Rectangle((int) (size.getScreenWidth() / 4), 400, 400, 100);
 		buttonExit = new Rectangle((int) (size.getScreenWidth() / 4), 600, 400, 100);
 		
+		/**
+		 * calls the saveImages function as it doesn't need an update function
+		 */
 		saveImages();
 	}
 	
@@ -45,14 +52,26 @@ public class Menu implements MouseListener{
 		exitButton = image.getImage("exitBut");
 	}
 	
+	/**
+	 * returns the parameters of the rectangle such as the x and y coordinate and the width and height
+	 * @return
+	 */
 	public Rectangle play() {
 		return buttonPlay;
 	}
 	
+	/**
+	 * returns the parameters of the rectangle such as the x and y coordinate and the width and height
+	 * @return
+	 */
 	public Rectangle exit() {
 		return buttonExit;
 	}
 	
+	/**
+	 * returns the parameters of the rectangle such as the x and y coordinate and the width and height
+	 * @return
+	 */
 	public Rectangle credits() {
 		return buttonCredits;
 	}
@@ -66,35 +85,5 @@ public class Menu implements MouseListener{
 		//g.drawRect(buttonPlay.x, buttonPlay.y, buttonPlay.width, buttonPlay.height);
 		//g.drawRect(buttonCredits.x, buttonCredits.y, buttonCredits.width, buttonCredits.height);
 		//g.drawRect(buttonExit.x, buttonExit.y, buttonExit.width, buttonExit.height);
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 }

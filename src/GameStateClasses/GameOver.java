@@ -28,6 +28,10 @@ public class GameOver {
 		gameOverPic = image.getImage("gameOverPic");
 	}
 	
+	/**
+	 * returns the parameters of the rectangle such as the x and y coordinate and the width and height
+	 * @return
+	 */
 	public Rectangle restartBut() {
 		return restartButton;
 	}

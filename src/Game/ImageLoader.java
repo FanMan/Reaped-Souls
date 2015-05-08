@@ -22,6 +22,12 @@ public class ImageLoader {
 	private BufferedImage skeleLeft, skeleRight, skeleAttackLeft;
 	
 	private BufferedImage background;
+	
+	/**
+	 * The images will be stored in a hashmap which will allow easier access to the blocks
+	 * without having to call the InputStream over and over again as it redraws the image
+	 * each update
+	 */
 	HashMap<String, BufferedImage> map = new HashMap<String, BufferedImage>();
 	
 	public ImageLoader() {

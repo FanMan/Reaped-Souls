@@ -353,9 +353,12 @@ public class Character {
 	
 	//////////////////////////////////////////////////////////////
 	
+	/**
+	 * the jump method for the character
+	 */
 	private void jumpState() {
 		
-		/*
+		/**
 		 * if onGround == true
 		 *   if(jump == true) jump is called
 		 *     velY
@@ -364,9 +367,14 @@ public class Character {
 		{
 			if(jump)
 			{
+				// apply an upward force of 15 when jump is called
 				velY -= 15;
 				onGround = false;
 				
+				/**
+				 * Helps determine which direction the character should face when they jump
+				 * It is for easier rendering
+				 */
 				if(facingRight) {
 					isJumpingRight = true;
 					isJumpingLeft = false;
@@ -409,6 +417,9 @@ public class Character {
 		}
 	}
 	
+	/**
+	 * The method to see when the character is injured by each enemy entity
+	 */
 	public void damageSystem() {
 		if(xPos >= enemy.boundingBox().getX() - 20 && (xPos + width) <= (enemy.boundingBox().getX() + enemy.boundingBox().getWidth() + 20)
 				&& yPos >= enemy.boundingBox().getY() - 10 && (yPos + height) <= (enemy.boundingBox().getY() + enemy.boundingBox().getHeight()) + 10)
@@ -417,6 +428,10 @@ public class Character {
 			//dead = true;
 			health -= 2;
 			
+			/**
+			 * Pushes the character back a certain amount when they are injured
+			 * Gives a visual feedback that the player has been injured
+			 */
 			if(facingRight) {
 				xPos -= 100;
 				yPos -= 30;
@@ -449,6 +464,10 @@ public class Character {
 	
 	//////////////////////////////////////////////////////////////
 	
+	/**
+	 * Stores the amount of unused time into the variable interp to be applied to the
+	 * movement of the character
+	 */
 	public void interpolate(double alpha) {
 		interp = alpha;
 	}
@@ -463,13 +482,11 @@ public class Character {
 		death();
 		jumpState();
 		
-		
-		///////////////////////////////////////////////////////////////////////
-		// minor collision detection
-		///////////////////////////////////////////////////////////////////////
-		
-		
-		
+		/**
+		 * calculate the location of where the player is to be displayed to the user
+		 * Should be done in the update method instead of the render method as I had
+		 * previously because it could cause some visual errors
+		 */
 		renderX = (xPos - previousX) * interp + previousX;
 		renderY = (yPos - previousY) * interp + previousY;
 	}
@@ -478,7 +495,7 @@ public class Character {
 		//renderX = xPos*interp + previousX*(1.0-interp);
 		//renderY = yPos*interp + previousY*(1.0-interp);
 		
-		g.setColor(Color.blue);
+		//g.setColor(Color.blue);
 		//g.drawImage(walkRight1, (int) renderX, (int) renderY, null);
 		//g.fillRect((int) renderX, (int) renderY, width, height);
 		

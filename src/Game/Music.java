@@ -13,6 +13,9 @@ public class Music {
 		
 	}
 	
+	/**
+	 * looks for the location of the music file in the resources folder
+	 */
 	public void playMusic() {
 		try {
 			InputStream is = this.getClass().getResourceAsStream("/music/She - Fuse.wav");
@@ -26,15 +29,24 @@ public class Music {
 		}
 	}
 	
+	/**
+	 * set to play the music when this function is called
+	 */
 	public void play() {
 		clip.setFramePosition(0);
 		clip.start();
 	}
 	
+	/**
+	 * allows for the music to loop so it does not end
+	 */
 	public void loop() {
 		clip.loop(Clip.LOOP_CONTINUOUSLY);
 	}
 	
+	/**
+	 * stops the music when this is called
+	 */
 	public void stop() {
 		clip.stop();
 	}

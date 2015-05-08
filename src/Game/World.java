@@ -18,7 +18,10 @@ public class World {
 	private Enemy2 enemy2;
 	private Music music;
 	
-	// takes in a level number so it knows which level to load
+	/**
+	 * takes in an ImageLoader which will allow each class access to that ImageLoader 
+	 */
+	
 	public World(ImageLoader i) {
 		image = i;
 		currLevel = 1;
@@ -29,6 +32,10 @@ public class World {
 		music = new Music();
 	}
 	
+	/**
+	 * when this is called for the first time, it saves the images of each class in
+	 * their own method so that it can be rendered properly
+	 */
 	public void init()
 	{
 		character.saveImages();
@@ -44,6 +51,11 @@ public class World {
 		background = image.getImage("backGround");
 	}
 	
+	/**
+	 * the following two methods were to try to get music to work but there
+	 * were errors occurring when called in the update method as mutliple
+	 * instances would occur
+	 */
 	public void musicStart() {
 		music.playMusic();
 		music.play();
@@ -53,6 +65,10 @@ public class World {
 		music.stop();
 	}
 	
+	/**
+	 * tried implementing the ability to change levels but when the next level tries to load,
+	 * the game would crash as the character would load first before the map finishes loading
+	 */
 	public void nextWorld() {
 		
 		/**
@@ -68,6 +84,9 @@ public class World {
 		
 	}
 	
+	/**
+	 * restarts the world when the player dies
+	 */
 	public void restartWorld() {
 		if(character.getLives() < 0)
 		{
@@ -106,6 +125,10 @@ public class World {
 					g.drawImage(airBlock, level.getBlockX(row, col), level.getBlockY(row, col), null);
 				}*/
 				
+				/**
+				 * @param switch(temp) gets the string type of each individual block and renders them 
+				 * onto the screen
+				 */
 				switch(temp)
 				{
 				case "AA" :
@@ -132,10 +155,18 @@ public class World {
 		character.render(g);
 	}
 	
+	/**
+	 * returns the character class to be used in the display class
+	 * @return
+	 */
 	public Character getCharacter() {
 		return character;
 	}
 	
+	/**
+	 * returns the LevelReaer class to be used in the display class
+	 * @return
+	 */
 	public LevelReader getLevel() {
 		return level;
 	}

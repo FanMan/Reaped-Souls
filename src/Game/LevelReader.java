@@ -41,6 +41,7 @@ public class LevelReader {
 			MapWidth = Integer.parseInt(reader.readLine());
 			MapHeight = Integer.parseInt(reader.readLine());
 			
+			// temporarly stores the first line of the level after the two numbers
 			String temp = reader.readLine();
 			
 			while(temp != null) {
@@ -48,6 +49,7 @@ public class LevelReader {
 				temp = reader.readLine();
 			}
 			
+			// sets the dimension of the height and width of two-dimensional array
 			block = new Block[MapHeight][MapWidth];
 			
 			String[] tempArray = text.split(" ");
@@ -78,18 +80,24 @@ public class LevelReader {
 					}
 					
 					/*
-					 * identifies the location for the enemy to spawn in
+					 * identifies the location for the first enemy to spawn in
 					 */
 					if(block[row][col].getId().equals("E1")) {
 						enemySpawnX = col;
 						enemySpawnY = row;
 					}
 					
+					/*
+					 * identifies the location for the second enemy to spawn in
+					 */
 					if(block[row][col].getId().equals("E2")) {
 						enemy2SpawnX = col;
 						enemy2SpawnY = row;
 					}
 					
+					/*
+					 * identifies the location of the finish line
+					 */
 					if(block[row][col].getId().equals("FL"))
 					{
 						nextLevelX = col;
@@ -101,6 +109,7 @@ public class LevelReader {
 			}
 			
 			/*
+			 * Tests to see if Buffered Reader actually work
 			System.out.println(block[4][1].getId());
 			System.out.println(block[0][1].bounds().x);
 			System.out.println(block[2][3].getId());
@@ -115,63 +124,79 @@ public class LevelReader {
 	
 	///////////////////////////////////////////////////////////////////////////////
 	
+	// gets the height of the level
 	public int getMapHeight() {
 		return MapHeight;
 	}
 	
+	// gets the width of the level
 	public int getMapWidth() {
 		return MapWidth;
 	}
 	
+	// gets the string type of the level aka the ID
 	public String getType(int row, int col) {
 		return block[row][col].getId();
 	}
 	
+	// gets the x-coordinate of the block
 	public int getBlockX(int row, int col) {
 		return block[row][col].bounds().x;
 	}
 	
+	// gets the y-coordinate of the block
 	public int getBlockY(int row, int col) {
 		return block[row][col].bounds().y;
 	}
 	
+	// gets the size of the block
 	public int getBlockSize(int row, int col) {
 		return block[row][col].bounds().width;
 	}
 	
+	// tells whether the block is passable or not
 	public boolean isPassable(int row, int col) {
 		return block[row][col].pass();
 	}
 	
+	// gets the bounds of the rectangle since the blocks are static
 	public Rectangle bounding(int row, int col)
 	{
 		return block[row][col].bounds();
 	}
 	
+	// sets the x-coordinate spawnpoint of the character
 	public int setSpawnX() {
 		return characterSpawnX * 100;
 	}
 	
+	// sets the y-coordinate spawnpoint of the character
 	public int setSpawnY() {
 		return characterSpawnY * 100;
 	}
 	
+	// sets the x-coordinate spawnpoint of the first enemy
 	public int enemySpawnX() {
 		return enemySpawnX * 100;
 	}
 	
+	// sets the y-coordinate spawnpoint of the first enemy
 	public int enemySpawnY() {
 		return enemySpawnY * 100;
 	}
 	
+	// sets the x-coordinate spawnpoint of the second enemy
 	public int enemy2SpawnX() {
 		return enemy2SpawnX * 100;
 	}
 	
+	// sets the y-coordinate spawnpoint of the second enemy
 	public int enemy2SpawnY() {
 		return enemy2SpawnY * 100;
 	}
 	
+	// the two methods below were to try to allow the character to switch 
+	// to the next level once they finish the previous level
 	public int levelLocX() {
 		return nextLevelX * 100;
 	}

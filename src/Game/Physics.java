@@ -11,10 +11,19 @@ public class Physics {
 		
 	}
 	
+	/**
+	 * returns the gravity of the world. It is consistent for all entities
+	 * @return
+	 */
 	public double getGravity() {
 		return gravity;
 	}
 	
+	/**
+	 * returns the speed of water if the character or enemy were in the water.
+	 * Was never used currently
+	 * @return
+	 */
 	public double getWater() {
 		return water;
 	}

@@ -14,6 +14,9 @@ public class Credits {
 	BufferedImage menu;// = image.getImage("menuBut");
 	BufferedImage creditsPic;// = image.getImage("creditsPic");
 	
+	/**
+	 * creating a static rectangle that will store the location and size
+	 */
 	public Rectangle menuButton;
 	public ScreenSize size;
 	
@@ -25,11 +28,18 @@ public class Credits {
 		saveImages();
 	}
 	
+	/**
+	 * saves the image of what the button will look like
+	 */
 	public void saveImages() {
 		menu = image.getImage("menuBut");
 		creditsPic = image.getImage("creditsPic");
 	}
 	
+	/**
+	 * returns the parameters of the rectangle such as the x and y coordinate and the width and height
+	 * @return
+	 */
 	public Rectangle returnToMenu() {
 		return menuButton;
 	}

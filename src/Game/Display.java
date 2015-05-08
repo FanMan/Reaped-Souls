@@ -38,9 +38,6 @@ public class Display extends Canvas implements Runnable, KeyListener{
 	 * Controls the entire game
 	 */
 	private World world;
-	//private Character character;
-	//private Enemy enemy;
-	//private LevelReader level;
 	private Camera camera;
 	
 	ImageLoader image = new ImageLoader();
@@ -51,7 +48,9 @@ public class Display extends Canvas implements Runnable, KeyListener{
 	
 	MouseInput mouse = new MouseInput();
 	
-	//private Character character;
+	/**
+	 * creates the ScreenSize class to help determine how big the scene will be
+	 */
 	public ScreenSize s = new ScreenSize();
 	
 	KeyEvent e;
@@ -73,12 +72,9 @@ public class Display extends Canvas implements Runnable, KeyListener{
 		}
 		
 		
-		this.addMouseListener(mouse);
-		// calls the keyboard input from the Controls class
-		//addFocusListener(this);
+		this.addMouseListener(mouse); // calls the keyboard input from the Controls class
 		camera = new Camera();
 		addKeyListener(this);
-		//this.addKeyListener(c);
 	}
 	
 	/**
@@ -101,13 +97,6 @@ public class Display extends Canvas implements Runnable, KeyListener{
 		
 		screenWidth = (int) (s.getScreenWidth());
 		screenHeight = (int) (s.getScreenHeight());
-		/*level = new LevelReader(1);
-		world = new World(level);
-		enemy = new Enemy(level);
-		character = new Character(level, enemy);
-		//camera = new Camera();
-		 * 
-		 */
 	}
 	
 	// function to run the game
@@ -117,6 +106,9 @@ public class Display extends Canvas implements Runnable, KeyListener{
 		init();
 		world.init();
 		
+		/**
+		 * The original time step that was implemented using .nanoSeconds()
+		 */
 		/*
 		double fps = 60;
 		double startTime = System.nanoTime();
@@ -148,6 +140,9 @@ public class Display extends Canvas implements Runnable, KeyListener{
 			render();
 		}*/
 		
+		/**
+		 * current time step using .currentTimeMillis
+		 */
 		double t = 0.0;
 		double dt = 1.0 / 60.0;
 		double currentTime = System.currentTimeMillis() * 0.001;
@@ -171,6 +166,10 @@ public class Display extends Canvas implements Runnable, KeyListener{
 			
 			while(accumulator >= dt)
 			{	
+				/**
+				 * allows for changes in the state when a button is pressed
+				 * Such as being able to change from the menu screen (menu state) to the actual game (game state)
+				 */
 				if(state == GameState.Menu) {
 					//menu.update();
 					if(mouse.clickX >= menu.play().x && mouse.clickX <= (menu.play().x + menu.play().width)
@@ -213,12 +212,13 @@ public class Display extends Canvas implements Runnable, KeyListener{
 					//world.musicStart();
 				}
 				
-				//world.update();
-				//camera.update(world.getCharacter(), screenWidth, screenHeight);
 				t += dt;
 				accumulator -= dt;
 			}
 			
+			/**
+			 * calculating the interpolation by dividing the left over time by the number of updates eac second
+			 */
 			double interpolation = accumulator / dt;
 			
 			//System.out.println("Interpolation " + interpolation);
@@ -229,7 +229,9 @@ public class Display extends Canvas implements Runnable, KeyListener{
 		}
 	}
 	
-	// renders the game
+	/**
+	 * renders the game
+	 */
 	public void render() {
 		bs = getBufferStrategy();
 		
@@ -278,6 +280,9 @@ public class Display extends Canvas implements Runnable, KeyListener{
 	
 	///////////////////////////////////////////////////
 	
+	/**
+	 * the 3 methods to see if the player has pressed a certain key or not
+	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
