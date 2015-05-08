@@ -21,6 +21,7 @@ public class Character {
 	 */
 	private LevelReader level;
 	private Enemy enemy;
+	private Enemy2 enemy2;
 	private Physics p;
 	
 	private int blockSize;
@@ -61,9 +62,10 @@ public class Character {
 	/**
 	 * @param constructor method of the character. Takes in LevelReader and Enemy
 	 */
-	public Character(LevelReader l, Enemy e, ImageLoader i) {
+	public Character(LevelReader l, Enemy e, Enemy2 e2, ImageLoader i) {
 		this.image = i;
 		this.enemy = e;
+		this.enemy2 = e2;
 		this.level = l;
 		p = new Physics();
 		
@@ -247,11 +249,15 @@ public class Character {
 		 */
 		if(left)
 		{
-			if (level.getType((int) (yPos / blockSize), (int) ((xPos - velX) / blockSize)).equals("AA") 
+			/*if (level.getType((int) (yPos / blockSize), (int) ((xPos - velX) / blockSize)).equals("AA") 
 					|| level.getType((int) ((yPos + height - velY) / blockSize), (int) ((xPos - velX) / blockSize)).equals("AA")
 					|| level.getType((int) ((yPos + (height / 2)) / blockSize), (int) ((xPos - velX) / blockSize)).equals("AA")
 					|| level.getType((int) (yPos / blockSize), (int) ((xPos - velX) / blockSize)).equals("TT") 
 					|| level.getType((int) ((yPos + height - velY) / blockSize), (int) ((xPos - velX) / blockSize)).equals("TT")) 
+					*/
+			if(level.isPassable((int) (yPos / blockSize), (int) ((xPos - velX) / blockSize)) 
+					|| level.isPassable((int) ((yPos + height - velY) / blockSize), (int) ((xPos - velX) / blockSize))
+					|| level.isPassable((int) ((yPos + (height / 2)) / blockSize), (int) ((xPos - velX) / blockSize)))
 			{
 				if ((xPos - velX) <= level.getBlockX((int) (yPos / blockSize), (int) ((xPos - velX) / blockSize)) + blockSize) 
 				{
@@ -398,32 +404,8 @@ public class Character {
 		}
 	}
 	
-	public void attackSystem() {
-		
-	}
-	
-	//////////////////////////////////////////////////////////////
-	
-	public void interpolate(double alpha) {
-		interp = alpha;
-	}
-	
-	public void update() {
-		previousX = xPos;
-		previousY = yPos;
-		
-		movement();
-		collision();
-		attackSystem();
-		death();
-		jumpState();
-		
-		
-		///////////////////////////////////////////////////////////////////////
-		// minor collision detection
-		///////////////////////////////////////////////////////////////////////
-		
-		if(xPos >= enemy.boundingBox().getX() - 10 && (xPos + width) <= (enemy.boundingBox().getX() + enemy.boundingBox().getWidth() + 10)
+	public void damageSystem() {
+		if(xPos >= enemy.boundingBox().getX() - 20 && (xPos + width) <= (enemy.boundingBox().getX() + enemy.boundingBox().getWidth() + 20)
 				&& yPos >= enemy.boundingBox().getY() - 10 && (yPos + height) <= (enemy.boundingBox().getY() + enemy.boundingBox().getHeight()) + 10)
 		{
 			enemy.collided(true);
@@ -440,6 +422,48 @@ public class Character {
 			}
 		}
 		else enemy.collided(false);
+		
+		if(xPos >= enemy2.boundingBox().getX() - 20 && (xPos + width) <= (enemy2.boundingBox().getX() + enemy2.boundingBox().getWidth() + 20)
+				&& yPos >= enemy2.boundingBox().getY() - 10 && (yPos + height) <= (enemy2.boundingBox().getY() + enemy2.boundingBox().getHeight()) + 10)
+		{
+			enemy2.collided(true);
+			//dead = true;
+			health -= 2;
+			
+			if(facingRight) {
+				xPos -= 100;
+				yPos -= 30;
+			}
+			else if(facingLeft) {
+				xPos += 100;
+				yPos -= 30;
+			}
+		}
+		else enemy2.collided(false);
+	}
+	
+	//////////////////////////////////////////////////////////////
+	
+	public void interpolate(double alpha) {
+		interp = alpha;
+	}
+	
+	public void update() {
+		previousX = xPos;
+		previousY = yPos;
+		
+		movement();
+		collision();
+		damageSystem();
+		death();
+		jumpState();
+		
+		
+		///////////////////////////////////////////////////////////////////////
+		// minor collision detection
+		///////////////////////////////////////////////////////////////////////
+		
+		
 		
 		renderX = (xPos - previousX) * interp + previousX;
 		renderY = (yPos - previousY) * interp + previousY;

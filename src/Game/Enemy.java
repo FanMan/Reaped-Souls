@@ -10,8 +10,6 @@ public class Enemy {
 	ImageLoader image;// = new ImageLoader();
 	private BufferedImage skeleLeft;// = image.getImage("SkeleLeft");
 	private BufferedImage skeleRight;// = image.getImage("SkeleRight");
-	private BufferedImage skeleAttackRight;// = image.getImage("");
-	private BufferedImage skeleAttackLeft;// = image.getImage("SkeleAttackLeft");
 	
 	private Rectangle hitbox;
 	private LevelReader level;
@@ -61,8 +59,6 @@ public class Enemy {
 	public void saveImages() {
 		skeleLeft = image.getImage("SkeleLeft");
 		skeleRight = image.getImage("SkeleRight");
-		skeleAttackRight = image.getImage("");
-		skeleAttackLeft = image.getImage("SkeleAttackLeft");
 	}
 	
 	public void spawnPoint(double x, double y) {

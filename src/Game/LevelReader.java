@@ -16,6 +16,7 @@ public class LevelReader {
 	
 	private int characterSpawnX = 0, characterSpawnY = 0;
 	private int enemySpawnX = 0, enemySpawnY = 0;
+	private int enemy2SpawnX = 0, enemy2SpawnY = 0;
 	private int nextLevelX = 0, nextLevelY = 0;
 	
 	public LevelReader(int currLevel) {
@@ -84,6 +85,11 @@ public class LevelReader {
 						enemySpawnY = row;
 					}
 					
+					if(block[row][col].getId().equals("E2")) {
+						enemy2SpawnX = col;
+						enemy2SpawnY = row;
+					}
+					
 					if(block[row][col].getId().equals("FL"))
 					{
 						nextLevelX = col;
@@ -133,6 +139,10 @@ public class LevelReader {
 		return block[row][col].bounds().width;
 	}
 	
+	public boolean isPassable(int row, int col) {
+		return block[row][col].pass();
+	}
+	
 	public Rectangle bounding(int row, int col)
 	{
 		return block[row][col].bounds();
@@ -152,6 +162,14 @@ public class LevelReader {
 	
 	public int enemySpawnY() {
 		return enemySpawnY * 100;
+	}
+	
+	public int enemy2SpawnX() {
+		return enemy2SpawnX * 100;
+	}
+	
+	public int enemy2SpawnY() {
+		return enemy2SpawnY * 100;
 	}
 	
 	public int levelLocX() {

@@ -1,14 +1,12 @@
 package Game;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 public class World {
 	
 	ImageLoader image;// = new ImageLoader();
-	BufferedImage airBlock;// = image.getImage("air");
-	BufferedImage dirtBlock;// = image.getImage("dirt");
+	BufferedImage airBlock, grassBlock, dirtBlock, finishLine;// = image.getImage("air");
 	
 	BufferedImage background;// = image.getImage("backGround");
 	
@@ -17,6 +15,7 @@ public class World {
 	private LevelReader level;
 	private Character character;
 	private Enemy enemy;
+	private Enemy2 enemy2;
 	private Music music;
 	
 	// takes in a level number so it knows which level to load
@@ -25,7 +24,8 @@ public class World {
 		currLevel = 1;
 		level = new LevelReader(currLevel);
 		enemy = new Enemy(level, image);
-		character = new Character(level, enemy, image);
+		enemy2 = new Enemy2(level, image);
+		character = new Character(level, enemy, enemy2, image);
 		music = new Music();
 	}
 	
@@ -33,11 +33,14 @@ public class World {
 	{
 		character.saveImages();
 		enemy.saveImages();
+		enemy2.saveImages();
 		//music.playMusic();
 		//music.play();
 		
 		airBlock = image.getImage("air");
+		grassBlock = image.getImage("grass");
 		dirtBlock = image.getImage("dirt");
+		finishLine = image.getImage("finishLine");
 		background = image.getImage("backGround");
 	}
 	
@@ -63,13 +66,6 @@ public class World {
 			
 		}
 		
-		/*
-		 * will restart the world
-		 */
-		//if(currLevel > 2)
-		//{
-		//	currLevel = 1;
-		//}
 	}
 	
 	public void restartWorld() {
@@ -84,6 +80,7 @@ public class World {
 	public void update() {
 		character.update();
 		enemy.update();
+		enemy2.update();
 		
 		//createWorld();
 		nextWorld();
@@ -112,10 +109,13 @@ public class World {
 				switch(temp)
 				{
 				case "AA" :
-					g.drawImage(dirtBlock, level.getBlockX(row, col), level.getBlockY(row, col), null);
+					g.drawImage(grassBlock, level.getBlockX(row, col), level.getBlockY(row, col), null);
 					break;
 				case "AB" :
 					g.drawImage(dirtBlock, level.getBlockX(row, col), level.getBlockY(row, col), null);
+					break;
+				case "FL" :
+					g.drawImage(finishLine, level.getBlockX(row, col), level.getBlockY(row, col), null);
 					break;
 				default :
 					g.drawImage(airBlock, level.getBlockX(row, col), level.getBlockY(row, col), null);
@@ -128,6 +128,7 @@ public class World {
 		}
 		
 		enemy.render(g);
+		enemy2.render(g);
 		character.render(g);
 	}
 	

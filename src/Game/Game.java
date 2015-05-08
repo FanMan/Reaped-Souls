@@ -1,15 +1,5 @@
 package Game;
 
-import java.awt.Canvas;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.image.BufferStrategy;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-
 import javax.swing.JFrame;
 
 public class Game {
@@ -17,7 +7,6 @@ public class Game {
 	// the main class to start up the entire application
 	public static void main(String[] args) {
 		ScreenSize screen = new ScreenSize();
-		
 		
 		JFrame f = new JFrame("Reaped Souls");
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -30,8 +19,9 @@ public class Game {
 		//f.setBackground(Color.black);
 		f.getContentPane().add(new Display());
 		f.setVisible(true);
-		f.setResizable(false);
+		f.setResizable(true);
 		f.pack();
+		
 		
 		// will keep this here just in case until testing has been done on other monitors
 		//Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
