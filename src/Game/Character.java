@@ -255,6 +255,11 @@ public class Character {
 					|| level.getType((int) (yPos / blockSize), (int) ((xPos - velX) / blockSize)).equals("TT") 
 					|| level.getType((int) ((yPos + height - velY) / blockSize), (int) ((xPos - velX) / blockSize)).equals("TT")) 
 					*/
+			/**
+			 * The following code below checks the boolean to see if the wall to the left is passable or not instead
+			 * of checking the strings which could end up being longer lines of code. This just shows a different method of
+			 * implementation
+			 */
 			if(level.isPassable((int) (yPos / blockSize), (int) ((xPos - velX) / blockSize)) 
 					|| level.isPassable((int) ((yPos + height - velY) / blockSize), (int) ((xPos - velX) / blockSize))
 					|| level.isPassable((int) ((yPos + (height / 2)) / blockSize), (int) ((xPos - velX) / blockSize)))
